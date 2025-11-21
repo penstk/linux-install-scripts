@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ORIGINAL_DIR=$(pwd)
-REPO_URL="https://github.com/stkiegerl/dotfiles"
+REPO_URL="https://github.com/penstk/dotfiles"
 REPO_NAME="dotfiles"
 
 is_stow_installed() {
-  pacman -Qi "stow" &> /dev/null
+  pacman -Qi "stow" &>/dev/null
 }
 
 if ! is_stow_installed; then
@@ -37,4 +37,3 @@ else
   echo "Failed to clone the repository."
   exit 1
 fi
-
