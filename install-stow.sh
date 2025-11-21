@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Install stow
-pacman -S --noconfirm --needed stow
+sudo pacman -S --noconfirm --needed stow
