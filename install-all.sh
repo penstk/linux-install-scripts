@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Install all packages in order
-# ./apps/install-kitty.sh
-./apps/nvim.sh
-./apps/stow.sh
-./apps/github-cli.sh
-# ./apps/spotify.sh
-# ./apps/install-dotfiles.sh
-# ./apps/install-tmux.sh
-# ./apps/install-zsh.sh
+#########################
+# CLI Tools
+#########################
+./apps/cli/docker.sh
+./apps/cli/gcc.sh
+./apps/cli/github-cli.sh
+./apps/cli/lazygit.sh
+./apps/cli/lazyvim-dependencies.sh
+./apps/cli/nodejs.sh
+./apps/cli/nvim.sh
+./apps/cli/stow.sh
 
-# ./set-shell.sh
+
+#########################
+# GUI Tools
+#########################
+
