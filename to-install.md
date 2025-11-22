@@ -1,48 +1,59 @@
 ## Systools
-docker
-winboat
+
+- [x] docker
+- [] winboat
 
 ## PackageManagers
-flatpak
-appimagelauncher
+
+- [] flatpak
+- [x] appimagelauncher
 
 ## Sysinfo
-glances
-btop
+
+- [] glances
+- [] btop
 
 ## Terminal/Shell
-kitty
-ghostty
-zsh
-tmux
-sellage
-fish
+
+- [x] kitty
+- [] ghostty
+- [] zsh
+- [] tmux
+- [] sellage
+- [] fish
 
 ## Multimedia
-spotify-launcher
-spotify-player
+
+- [x] spotify-launcher
+- [x] spotify-player
 
 ## Browser
-brave
+
+- [x] brave
 
 ## FileManagers
-krusader
-midnight commander
-worker
-yazi
+
+- [] krusader
+- [] midnight commander
+- [] worker
+- [] yazi
 
 ## texteditors
-nvim/lazyvim
+
+- [] nvim/lazyvim
 
 ## documentedit
-libreoffice
-xournalpp
+
+- [] libreoffice
+- [] xournalpp
 
 ## communication
-ferdium
-thunderbird
-discord
+
+- [x] ferdium
+- [] thunderbird
+- [] discord
 
 ## Dev
-vscode
-nvim/lazyvim
+
+- [] vscode
+- [x] nvim/lazyvim
