@@ -1,5 +1,5 @@
 # Application name (used to check if the application is already installed)
-APP_NAME="nvim"
+APP_NAME="python3"
 
 # Package names for each distro family.
 # Set to an empty string ("") if this package is not supported on that family.
