@@ -1,35 +1,33 @@
+# To Install
+
 ## Systools
 
-- [x] docker
 - [] winboat
 
 ## PackageManagers
 
 - [] flatpak
-- [x] appimagelauncher
+- [] appimagelauncher
 
 ## Sysinfo
 
 - [] glances
-- [] btop
 
 ## Terminal/Shell
 
-- [x] kitty
 - [] ghostty
 - [] zsh
 - [] tmux
 - [] sellage
-- [] fish
 
 ## Multimedia
 
-- [x] spotify-launcher
-- [x] spotify-player
+- [] spotify-launcher
+- [] spotify-player
 
 ## Browser
 
-- [x] brave
+- [] brave
 
 ## FileManagers
 
@@ -38,10 +36,6 @@
 - [] worker
 - [] yazi
 
-## texteditors
-
-- [] nvim/lazyvim
-
 ## documentedit
 
 - [] libreoffice
@@ -49,11 +43,11 @@
 
 ## communication
 
-- [x] ferdium
+- [] ferdium
 - [] thunderbird
 - [] discord
 
 ## Dev
 
 - [] vscode
-- [x] nvim/lazyvim
+- [] lazyvim_dependencies
