@@ -9,8 +9,8 @@ export ROOT_DIR="$SCRIPT_DIR"
 PKG_CONF="$SCRIPT_DIR/packages.conf"
 PKG_DIR="$SCRIPT_DIR/packages"
 
-# --- Detect distro family ----------------------------------------------------
-detect_distro_family() {
+# --- Detect distro ----------------------------------------------------
+detect_distro() {
   if [[ "$(uname -s)" != "Linux" ]]; then
     echo "unknown"
     return 1
@@ -21,38 +21,27 @@ detect_distro_family() {
     . /etc/os-release
 
     id="${ID,,}"
-    id_like="${ID_LIKE:-}"
-    id_like="${id_like,,}"
 
-    # Direct ID matches
     case "$id" in
-    arch | cachyos | endeavouros | manjaro)
+    arch)
       echo "arch"
       return 0
       ;;
-    debian | ubuntu | linuxmint)
-      echo "debian"
+    cachyos)
+      echo "cachyos"
       return 0
       ;;
-    fedora | rhel | centos | rocky | almalinux)
-      echo "redhat"
+    ubuntu)
+      echo "ubuntu"
       return 0
       ;;
-    esac
-
-    # Fallback to ID_LIKE if present
-    case "$id_like" in
-    *arch*)
-      echo "arch"
+    fedora)
+      echo "fedora"
       return 0
       ;;
-    *debian*)
-      echo "debian"
-      return 0
-      ;;
-    *rhel* | *fedora* | *centos*)
-      echo "redhat"
-      return 0
+    *)
+      echo "unknown"
+      return 1
       ;;
     esac
   fi
@@ -61,13 +50,12 @@ detect_distro_family() {
   return 1
 }
 
-DISTRO_FAMILY="$(detect_distro_family)" || {
-  echo "ERROR: Could not detect distro family (got '$DISTRO_FAMILY')." >&2
-  echo "       Please run on a supported Linux distro or set DISTRO_FAMILY manually." >&2
+DISTRO="$(detect_distro)" || {
+  echo "ERROR: Could not detect distro (got '$DISTRO')." >&2
   exit 1
 }
-export DISTRO_FAMILY
-echo "==> Detected distro family: $DISTRO_FAMILY"
+export DISTRO
+echo "==> Detected distro: $DISTRO"
 
 # --- Authenticate once with sudo and keepalive ------------------------------
 echo "==> Asking for sudo once..."
@@ -84,23 +72,26 @@ trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
 
 # --- Update all packages before installing ----------------------------------
 echo "==> Updating system..."
-case "$DISTRO_FAMILY" in
-arch)
+case "$DISTRO" in
+arch | cachyos)
   sudo pacman -Syu --noconfirm
   ;;
-debian)
+ubuntu)
   sudo apt-get update
-  sudo apt-get upgrade -y
+  sudo apt-get dist-upgrade -y
   export APT_UPDATED=1
   ;;
-redhat)
+fedora)
   sudo dnf upgrade -y
+  ;;
+*)
+  echo "ERROR: Unsupported distro '$DISTRO' for system update." >&2
+  exit 1
   ;;
 esac
 
-# --- Read packages.conf and output entries like "base/btop", "dev/git", ...
+# --- Read packages from packages.conf
 read_packages_from_conf() {
-  local current_group=""
   local line first
 
   while IFS= read -r line || [[ -n "$line" ]]; do
@@ -112,22 +103,12 @@ read_packages_from_conf() {
 
     [[ -z "$line" ]] && continue
 
-    # Group header: [base], [dev], ...
-    if [[ "$line" =~ ^\[[^]]+\]$ ]]; then
-      current_group="${line:1:${#line}-2}"
-      continue
-    fi
-
     # First word is the package name
     set -- $line
     first="$1"
     [[ -z "$first" ]] && continue
 
-    if [[ -n "$current_group" ]]; then
-      echo "$current_group/$first"
-    else
-      echo "$first"
-    fi
+    echo "$first"
   done <"$PKG_CONF"
 }
 

@@ -1,11 +1,11 @@
 # Application name (used to check if the application is already installed)
-APP_NAME="btop"
+APP_NAME="ripgrep"
 
-# Package names for each distro family.
+# Package names for each distro.
 # Set to an empty string ("") if this package is not supported on that distro.
-ARCH_PKG="btop"
-DEBIAN_PKG=""
-REDHAT_PKG=""
+ARCH_PKG="ripgrep"
+UBUNTU_PKG="ripgrep"
+FEDORA_PKG="ripgrep"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/cmd_helper.sh"
@@ -16,5 +16,5 @@ is_installed() {
 }
 
 install_package() {
-  repo_install "$APP_NAME" "$ARCH_PKG" "$DEBIAN_PKG" "$REDHAT_PKG"
+  repo_install "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }

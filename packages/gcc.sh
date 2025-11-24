@@ -1,11 +1,11 @@
 # Application name (used to check if the application is already installed)
-APP_NAME="kitty"
+APP_NAME="gcc"
 
-# Package names for each distro family.
+# Package names for each distro.
 # Set to an empty string ("") if this package is not supported on that distro.
-ARCH_PKG="kitty"
-DEBIAN_PKG=""
-REDHAT_PKG=""
+ARCH_PKG="gcc"
+UBUNTU_PKG="gcc"
+FEDORA_PKG="gcc"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/cmd_helper.sh"
@@ -16,5 +16,5 @@ is_installed() {
 }
 
 install_package() {
-  repo_install "$APP_NAME" "$ARCH_PKG" "$DEBIAN_PKG" "$REDHAT_PKG"
+  repo_install "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }

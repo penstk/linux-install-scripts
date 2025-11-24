@@ -1,53 +1,53 @@
-# To Install
+## Missing install scripts
 
-## Systools
+### Systools
 
 - [] winboat
 
-## PackageManagers
+### PackageManagers
 
 - [] flatpak
 - [] appimagelauncher
 
-## Sysinfo
+### Sysinfo
 
 - [] glances
 
-## Terminal/Shell
+### Terminal/Shell
 
 - [] ghostty
 - [] zsh
 - [] tmux
 - [] sellage
 
-## Multimedia
+### Multimedia
 
 - [] spotify-launcher
 - [] spotify-player
 
-## Browser
+### Browser
 
 - [] brave
 
-## FileManagers
+### FileManagers
 
 - [] krusader
 - [] midnight commander
 - [] worker
 - [] yazi
 
-## documentedit
+### documentedit
 
 - [] libreoffice
 - [] xournalpp
 
-## communication
+### communication
 
 - [] ferdium
 - [] thunderbird
 - [] discord
 
-## Dev
+### Dev
 
 - [] vscode
 - [] lazyvim_dependencies

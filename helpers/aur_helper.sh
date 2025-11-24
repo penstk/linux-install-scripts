@@ -1,16 +1,11 @@
-aur_is_installed() {
-  local app_name=$1
-  command -v "$app_name" >/dev/null 2>&1
-}
-
 aur_install() {
   local app_name=$1
   local repo_url=$2
   shift 2
   local required_pkgs=("$@")
 
-  case "$DISTRO_FAMILY" in
-  arch)
+  case "$DISTRO" in
+  arch | cachyos)
     sudo pacman -S --noconfirm --needed "${required_pkgs[@]}"
 
     TMPDIR="$(mktemp -d -t "${app_name}-build-XXXXXXXXXX")"
@@ -47,18 +42,18 @@ aur_install() {
     fi
     ;;
 
-  debian)
-    echo "$app_name is not implemented for Debian/Ubuntu" >&2
+  ubuntu)
+    echo "$app_name is not implemented for Ubuntu" >&2
     return 1
     ;;
 
-  redhat)
-    echo "$app_name is not implemented for RedHat/Fedora" >&2
+  fedora)
+    echo "$app_name is not implemented for Fedora" >&2
     return 1
     ;;
 
   *)
-    echo "$app_name: Unsupported distro family '$DISTRO_FAMILY'." >&2
+    echo "$app_name: Unsupported distro '$DISTRO'." >&2
     return 1
     ;;
   esac

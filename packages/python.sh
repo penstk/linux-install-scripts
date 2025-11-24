@@ -1,11 +1,11 @@
 # Application name (used to check if the application is already installed)
-APP_NAME="python3"
+APP_NAME="python"
 
-# Package names for each distro family.
-# Set to an empty string ("") if this package is not supported on that family.
+# Package names for each distro.
+# Set to an empty string ("") if this package is not supported on that distro.
 ARCH_PKG="python"
-DEBIAN_PKG=""
-REDHAT_PKG=""
+UBUNTU_PKG="python3"
+FEDORA_PKG="python3"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/repo_helper.sh"
@@ -49,5 +49,5 @@ is_installed() {
 }
 
 install_package() {
-  repo_install "$APP_NAME" "$ARCH_PKG" "$DEBIAN_PKG" "$REDHAT_PKG"
+  repo_install "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }
