@@ -22,7 +22,6 @@
 
 ### FileManagers
 
-- worker
 - yazi
 
 ### documentedit
