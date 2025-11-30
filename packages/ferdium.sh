@@ -1,11 +1,6 @@
 # Application name (used in logs / messages)
 APP_NAME="ferdium"
 
-# Command to check for in PATH.
-# Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="$APP_NAME"
-CMD_NAME="flatpak run org.ferdium.Ferdium"
-
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
@@ -24,7 +19,14 @@ esac
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  case "$DISTRO" in
+  fedora)
+    is_installed_deps "${DEPENDENCIES[@]}" && flatpak info org.ferdium.Ferdium &>/dev/null
+    ;;
+  *)
+    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "ferdium"
+    ;;
+  esac
 }
 
 install_package() {

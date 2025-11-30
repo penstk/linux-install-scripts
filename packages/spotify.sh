@@ -1,12 +1,6 @@
 # Application name (used in logs / messages)
 APP_NAME="spotify"
 
-# Command to check for in PATH.
-# Use a different value if the binary name differs from APP_NAME.
-CMD_NAME_ARCH="spotify-launcher"
-CMD_NAME_UBUNTU="spotify"
-CMD_NAME_FEDORA="flatpak run com.spotify.Client"
-
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
@@ -24,15 +18,16 @@ esac
 is_installed() {
   case "$DISTRO" in
   arch | cachyos)
-    is_installed_cmd "$CMD_NAME_ARCH"
+    is_installed_cmd "spotify-launcher"
     ;;
 
   ubuntu)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME_UBUNTU"
+    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "spotify"
     ;;
 
   fedora)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME_FEDORA"
+    is_installed_deps "${DEPENDENCIES[@]}" && flatpak info com.spotify.Client &>/dev/null
+
     ;;
 
   *)
