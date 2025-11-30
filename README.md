@@ -3,7 +3,6 @@
 ### Systools
 
 - winboat
-- appimagelauncher
 
 ### PackageManagers
 
