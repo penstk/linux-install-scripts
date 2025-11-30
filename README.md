@@ -26,7 +26,6 @@
 ### Browser
 
 - chromium
-- firefox
 
 ### FileManagers
 
@@ -45,5 +44,4 @@
 
 ### Dev
 
-- vscode
 - lazydocker
