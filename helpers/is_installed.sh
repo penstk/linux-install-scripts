@@ -14,41 +14,39 @@ is_installed_cmd() {
 #   0 = all dependencies installed
 #   1 = at least one missing or not installed
 is_installed_deps() {
-  local deps=("$@")
-  local dep pkg_file
-  local pkgs_dir="$ROOT_DIR/packages"
+  ( # Run in a subshell so sourcing package scripts and unsetting functions does not affect the caller
+    set +e
 
-  # No deps -> trivially satisfied
-  if ((${#deps[@]} == 0)); then
-    return 0
-  fi
+    local deps=("$@")
+    local dep pkg_file
+    local pkgs_dir="$ROOT_DIR/packages"
 
-  for dep in "${deps[@]}"; do
-    pkg_file="$pkgs_dir/$dep.sh"
-
-    # If there is no package script for the dependency, treat it as missing
-    if [[ ! -f "$pkg_file" ]]; then
-      return 1
+    # no deps -> trivially satisfied
+    if ((${#deps[@]} == 0)); then
+      exit 0
     fi
 
-    # Clean up any previous definitions to avoid collisions
-    unset DEPENDENCIES is_installed install_package 2>/dev/null || true
+    for dep in "${deps[@]}"; do
+      pkg_file="$pkgs_dir/$dep.sh"
 
-    # shellcheck source=/dev/null
-    . "$pkg_file" || {
-      unset DEPENDENCIES is_installed install_package 2>/dev/null || true
-      return 1
-    }
+      # if there is no package script for the dependency, treat it as missing
+      if [[ ! -f "$pkg_file" ]]; then
+        exit 1
+      fi
 
-    # Use the dependency package's own is_installed() logic
-    if ! is_installed 2>/dev/null; then
-      unset DEPENDENCIES is_installed install_package 2>/dev/null || true
-      return 1
-    fi
+      unset dependencies is_installed install_package 2>/dev/null || true
 
-    # Clean up before checking the next dependency
-    unset DEPENDENCIES is_installed install_package 2>/dev/null || true
-  done
+      # shellcheck source=/dev/null
+      . "$pkg_file" || exit 1
 
-  return 0
+      # dependency script must define its own is_installed()
+      if ! is_installed 2>/dev/null; then
+        exit 1
+      fi
+
+      unset dependencies is_installed install_package 2>/dev/null || true
+    done
+
+    exit 0
+  )
 }
