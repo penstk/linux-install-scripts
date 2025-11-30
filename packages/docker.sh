@@ -20,7 +20,7 @@ install_package() {
     ;;
   ubuntu)
     # Uninstall any conflicting package
-    sudo apt -y remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
+    sudo apt -y remove "$(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)"
     # Only run apt-get update if it hasn’t been done in this session
     if [[ "${APT_UPDATED:-0}" != 1 ]]; then
       sudo apt-get update
