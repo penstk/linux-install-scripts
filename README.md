@@ -6,7 +6,6 @@
 
 ### PackageManagers
 
-- flatpak
 - appimagelauncher
 
 ### Sysinfo
