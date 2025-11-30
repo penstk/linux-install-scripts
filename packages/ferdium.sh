@@ -8,15 +8,15 @@ CMD_NAME="$APP_NAME"
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
-  arch | cachyos)
-    DEPENDENCIES+=(paru)
-    ;;
-  ubuntu)
-    DEPENDENCIES+=(snapd)
-    ;;
-  fedora)
-    DEPENDENCIES+=(flatpak)
-    ;;
+arch | cachyos)
+  DEPENDENCIES+=(paru)
+  ;;
+ubuntu)
+  DEPENDENCIES+=(snapd)
+  ;;
+fedora)
+  DEPENDENCIES+=(flatpak)
+  ;;
 esac
 
 # Load helper scripts
@@ -35,7 +35,7 @@ install_package() {
     sudo snap install ferdium
     ;;
   fedora)
-    flatpak install flathub org.ferdium.Ferdium
+    flatpak install -y flathub org.ferdium.Ferdium
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
