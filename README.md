@@ -4,17 +4,9 @@
 
 - winboat
 
-### Sysinfo
-
-- glances
-
-### Package-Managers
-
-- pacstall
-
 ### Terminal/Shell
 
-- sellage
+- zellij
 
 ### Multimedia
 
