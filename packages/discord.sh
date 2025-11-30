@@ -19,7 +19,7 @@ install_package() {
     sudo pacman -S --needed --noconfirm discord
     ;;
   ubuntu)
-    sudo snap install dicord
+    sudo snap install discord
     ;;
 
   fedora)
