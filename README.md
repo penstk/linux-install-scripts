@@ -4,10 +4,6 @@
 
 - winboat
 
-### PackageManagers
-
-- appimagelauncher
-
 ### Sysinfo
 
 - glances
@@ -18,11 +14,10 @@
 
 ### Multimedia
 
-- spotify-player
+- spotify-player # TODO: implement for Fedora & Ubuntu
 
 ### FileManagers
 
-- krusader
 - midnight commander
 - worker
 - yazi
