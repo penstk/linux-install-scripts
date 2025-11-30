@@ -241,9 +241,6 @@ main() {
   # Build dependency-resolved install order
   build_install_order "${pkgs[@]}"
 
-  # Debug message - TODO: remove
-  echo "==> Install order: ${INSTALL_ORDER[*]}"
-
   local -a installed_pkgs=()
   local -a failed_pkgs=()
   local -a skipped_pkgs=()
