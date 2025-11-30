@@ -35,7 +35,3 @@
 ### communication
 
 - ferdium
-
-### Dev
-
-- lazydocker
