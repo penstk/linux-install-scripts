@@ -4,6 +4,7 @@ APP_NAME="ferdium"
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="$APP_NAME"
+CMD_NAME="flatpak run org.ferdium.Ferdium"
 
 # Distro-specific dependencies:
 DEPENDENCIES=()
