@@ -248,10 +248,11 @@ main() {
   # Install all packages
 
   for pkg in "${INSTALL_ORDER[@]}"; do
-    set +e
-    process_package "$pkg"
-    status=$?
-    set -e
+    if process_package "$pkg"; then
+      status=0
+    else
+      status=$?
+    fi
 
     case "$status" in
     0)
@@ -299,7 +300,6 @@ main() {
     echo "FAILED installations: none"
   fi
 
-  # <-- Important: always exit 0, even if some failed
   exit 0
 }
 
