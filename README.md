@@ -42,8 +42,6 @@
 ### communication
 
 - ferdium
-- thunderbird
-- discord
 
 ### Dev
 
