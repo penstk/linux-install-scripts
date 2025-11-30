@@ -53,7 +53,7 @@ install_package() {
     ;;
 
   fedora)
-    sudo flatpak install flathub com.spotify.Client
+    sudo flatpak install -y flathub com.spotify.Client
     ;;
 
   *)
