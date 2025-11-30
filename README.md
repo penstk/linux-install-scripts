@@ -17,8 +17,6 @@
 ### Terminal/Shell
 
 - [] ghostty
-- [] zsh
-- [] tmux
 - [] sellage
 
 ### Multimedia
