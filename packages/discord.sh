@@ -6,6 +6,14 @@ APP_NAME="discord"
 CMD_NAME="$APP_NAME"
 CMD_NAME_FEDORA="Discord"
 
+# Distro-specific dependencies:
+DEPENDENCIES=()
+case "$DISTRO" in
+ubuntu)
+  DEPENDENCIES+=(snapd)
+  ;;
+esac
+
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 
@@ -16,7 +24,7 @@ is_installed() {
     ;;
 
   ubuntu)
-    is_installed_cmd "$CMD_NAME"
+    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
     ;;
 
   fedora)
