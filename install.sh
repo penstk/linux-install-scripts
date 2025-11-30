@@ -294,12 +294,13 @@ main() {
     for p in "${failed_pkgs[@]}"; do
       echo "  - $p"
     done
-    # Non-zero exit if anything failed
-    exit 1
   else
     echo
     echo "FAILED installations: none"
   fi
+
+  # <-- Important: always exit 0, even if some failed
+  exit 0
 }
 
 main
