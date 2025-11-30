@@ -2,52 +2,50 @@
 
 ### Systools
 
-- [] winboat
+- winboat
 - appimagelauncher
 
 ### PackageManagers
 
-- [] flatpak
-- [] appimagelauncher
+- flatpak
+- appimagelauncher
 
 ### Sysinfo
 
-- [] glances
+- glances
 
 ### Terminal/Shell
 
-- [] ghostty
-- [] sellage
+- sellage
 
 ### Multimedia
 
-- [] spotify-launcher
-- [] spotify-player
+- spotify-launcher
+- spotify-player
 
 ### Browser
 
-- [] brave
+- chromium
+- firefox
 
 ### FileManagers
 
-- [] krusader
-- [] midnight commander
-- [] worker
-- [] yazi
+- krusader
+- midnight commander
+- worker
+- yazi
 
 ### documentedit
 
-- [] libreoffice
-- [] xournalpp
+- xournalpp
 
 ### communication
 
-- [] ferdium
-- [] thunderbird
-- [] discord
+- ferdium
+- thunderbird
+- discord
 
 ### Dev
 
-- [] vscode
-- [] lazyvim_dependencies
-- [] lazydocker
+- vscode
+- lazydocker
