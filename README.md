@@ -8,6 +8,10 @@
 
 - glances
 
+### Package-Managers
+
+- pacstall
+
 ### Terminal/Shell
 
 - sellage
@@ -18,14 +22,9 @@
 
 ### FileManagers
 
-- midnight commander
 - worker
 - yazi
 
 ### documentedit
 
 - xournalpp
-
-### communication
-
-- ferdium
