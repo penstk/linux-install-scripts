@@ -15,14 +15,14 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S ghostty
+    sudo pacman -S --needed --noconfirm ghostty
     ;;
   ubuntu)
     sudo snap install ghostty --classic
     ;;
   fedora)
     sudo dnf copr enable scottames/ghostty
-    sudo dnf install ghostty
+    sudo dnf install -y ghostty
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

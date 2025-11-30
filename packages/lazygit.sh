@@ -19,11 +19,11 @@ install_package() {
     sudo pacman -S --needed --noconfirm lazygit
     ;;
   ubuntu)
-    sudo apt install lazygit
+    sudo apt install -y lazygit
     ;;
   fedora)
     sudo dnf copr enable dejan/lazygit
-    sudo dnf install lazygit
+    sudo dnf install -y lazygit
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
