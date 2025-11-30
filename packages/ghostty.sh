@@ -21,7 +21,7 @@ install_package() {
     sudo snap install ghostty --classic
     ;;
   fedora)
-    sudo dnf copr enable scottames/ghostty
+    sudo dnf -y copr enable scottames/ghostty
     sudo dnf install -y ghostty
     ;;
   *)
