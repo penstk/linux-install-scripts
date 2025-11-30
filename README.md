@@ -23,10 +23,6 @@
 - spotify-launcher
 - spotify-player
 
-### Browser
-
-- chromium
-
 ### FileManagers
 
 - krusader
