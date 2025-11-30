@@ -18,7 +18,6 @@
 
 ### Multimedia
 
-- spotify-launcher
 - spotify-player
 
 ### FileManagers
