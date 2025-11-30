@@ -35,7 +35,7 @@ install_package() {
     sudo snap install ferdium
     ;;
   fedora)
-    flatpak install -y flathub org.ferdium.Ferdium
+    sudo flatpak install -y flathub org.ferdium.Ferdium
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
