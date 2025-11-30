@@ -7,13 +7,13 @@ UBUNTU_PKG="nodejs"
 FEDORA_PKG="nodejs"
 
 # Load helper scripts
-. "$ROOT_DIR/helpers/cmd_helper.sh"
-. "$ROOT_DIR/helpers/repo_helper.sh"
+. "$ROOT_DIR/helpers/is_installed.sh"
+. "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  cmd_is_installed "$APP_NAME"
+  is_installed_cmd "$APP_NAME"
 }
 
 install_package() {
-  repo_install "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }

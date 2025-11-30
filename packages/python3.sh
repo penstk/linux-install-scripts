@@ -1,14 +1,15 @@
-# Application name (used to check if the application is already installed)
-APP_NAME="python"
+# Application name (used in logs / messages)
+APP_NAME="python3"
 
-# Package names for each distro.
-# Set to an empty string ("") if this package is not supported on that distro.
+# Package names in each distro's package manager.
+# Set to "" if this package is not available on that distro.
+# Keep "$APP_NAME" when the package name matches APP_NAME.
 ARCH_PKG="python"
 UBUNTU_PKG="python3"
 FEDORA_PKG="python3"
 
 # Load helper scripts
-. "$ROOT_DIR/helpers/repo_helper.sh"
+. "$ROOT_DIR/helpers/install.sh"
 
 # Helper: check if given command exists and is Python 3.x
 _python_cmd_is_v3() {
@@ -49,5 +50,5 @@ is_installed() {
 }
 
 install_package() {
-  repo_install "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }

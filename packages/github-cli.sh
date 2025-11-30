@@ -1,12 +1,21 @@
-# Application name (used to check if the application is already installed)
+# Application name (used in logs / messages)
 APP_NAME="github-cli"
+
+# Command to check for in PATH.
+# Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="gh"
 
+# Packages that should be installed before installing this package.
+# Each entry must correspond to another package script in the packages directory (without .sh).
+DEPENDENCIES=(
+  git
+)
+
 # Load helper scripts
-. "$ROOT_DIR/helpers/cmd_helper.sh"
+. "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  cmd_is_installed "$CMD_NAME"
+  is_installed_cmd "$CMD_NAME" && is_installed_deps "${DEPENDENCIES[@]}"
 }
 
 install_package() {

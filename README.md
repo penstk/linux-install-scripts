@@ -51,3 +51,4 @@
 
 - [] vscode
 - [] lazyvim_dependencies
+- [] lazydocker

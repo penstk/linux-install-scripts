@@ -6,8 +6,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Global root dir for helpers/packages
 export ROOT_DIR="$SCRIPT_DIR"
 
-PKG_CONF="$SCRIPT_DIR/packages.conf"
 PKG_DIR="$SCRIPT_DIR/packages"
+
+DEFAULT_PKG_CONF="$SCRIPT_DIR/packages.conf"
+
+# If no config file is passed as an argument use the default config file
+PKG_CONF="${1:-$DEFAULT_PKG_CONF}"
+
+# If the config file path is not absolute, treat it as relative to the script
+if [[ "$PKG_CONF" != /* ]]; then
+  PKG_CONF="$SCRIPT_DIR/$PKG_CONF"
+fi
 
 # --- Detect distro ----------------------------------------------------
 detect_distro() {
@@ -90,7 +99,7 @@ fedora)
   ;;
 esac
 
-# --- Read packages from packages.conf
+# --- Read packages from packages.conf ----------------------------------------
 read_packages_from_conf() {
   local line first
 
@@ -112,50 +121,152 @@ read_packages_from_conf() {
   done <"$PKG_CONF"
 }
 
+# --- Resolve dependencies from a package script ------------------------------
+get_package_dependencies() {
+  local pkg="$1"
+  local pkg_file="$PKG_DIR/$pkg.sh"
+
+  # If the script doesn't exist, we can't know dependencies; let process_package fail later
+  if [[ ! -f "$pkg_file" ]]; then
+    return 0
+  fi
+
+  # Clean up any previous DEPENDENCIES/functions
+  unset DEPENDENCIES is_installed install_package 2>/dev/null || true
+  DEPENDENCIES=()
+
+  # shellcheck source=/dev/null
+  # Disable 'set -e' while sourcing in case the package script has something non-fatal
+  set +e
+  . "$pkg_file"
+  local rc=$?
+  set -e
+
+  # Optional debug:
+  # echo "DEBUG: deps for $pkg: ${DEPENDENCIES[*]-<none>}" >&2
+
+  # Print dependencies if any
+  if ((${#DEPENDENCIES[@]} > 0)); then
+    printf '%s\n' "${DEPENDENCIES[@]}"
+  fi
+
+  # Clean up again so this doesn't leak into later calls
+  unset DEPENDENCIES is_installed install_package 2>/dev/null || true
+
+  return "$rc"
+}
+
+# Global install order and seen set for dependency resolution
+declare -a INSTALL_ORDER=()
+declare -A SEEN_PKGS=()
+
+add_with_dependencies() {
+  local pkg="$1"
+
+  # Avoid processing the same pkg multiple times
+  if [[ -n "${SEEN_PKGS[$pkg]+x}" ]]; then
+    return
+  fi
+  SEEN_PKGS["$pkg"]=1
+
+  # First handle dependencies
+  local dependencies=()
+  mapfile -t dependencies < <(get_package_dependencies "$pkg")
+
+  local dep
+  for dep in "${dependencies[@]}"; do
+    add_with_dependencies "$dep"
+  done
+
+  # Then add this package itself
+  INSTALL_ORDER+=("$pkg")
+}
+
+build_install_order() {
+  INSTALL_ORDER=()
+  SEEN_PKGS=()
+
+  local pkg
+  for pkg in "$@"; do
+    add_with_dependencies "$pkg"
+  done
+}
+
+# --- Handle install logic for a single package name from packages.conf ---------
+# Returns:
+#   0 = install succeeded
+#   1 = failed (including missing script)
+#   2 = already installed (skipped)
+process_package() {
+  local pkg="$1"
+  local pkg_file="$PKG_DIR/$pkg.sh"
+
+  if [[ ! -f "$pkg_file" ]]; then
+    echo "Skipping '$pkg' (file '$pkg_file' not found)"
+    return 1
+  fi
+
+  echo "=== $pkg ==="
+
+  # shellcheck source=/dev/null
+  . "$pkg_file"
+
+  if is_installed; then
+    echo "Already installed, skipping."
+    unset -f is_installed install_package
+    return 2
+  fi
+
+  echo "Installing..."
+
+  set +e
+  install_package
+  local status=$?
+  set -e
+
+  unset -f is_installed install_package
+
+  if ((status == 0)); then
+    echo "Install of '$pkg' succeeded."
+    return 0
+  else
+    echo "Install of '$pkg' FAILED (exit $status)."
+    return 1
+  fi
+}
+
 main() {
   mapfile -t pkgs < <(read_packages_from_conf)
+
+  # Build dependency-resolved install order
+  build_install_order "${pkgs[@]}"
+
+  # Debug message - TODO: remove
+  echo "==> Install order: ${INSTALL_ORDER[*]}"
 
   local -a installed_pkgs=()
   local -a failed_pkgs=()
   local -a skipped_pkgs=()
 
-  for pkg in "${pkgs[@]}"; do
-    pkg_file="$PKG_DIR/$pkg.sh"
+  # Install all packages
 
-    if [[ ! -f "$pkg_file" ]]; then
-      echo "Skipping '$pkg' (file '$pkg_file' not found)"
-      failed_pkgs+=("$pkg (missing script)")
-      continue
-    fi
+  for pkg in "${INSTALL_ORDER[@]}"; do
+    set +e
+    process_package "$pkg"
+    status=$?
+    set -e
 
-    echo "=== $pkg ==="
-
-    # Load is_installed() and install_package()
-    # shellcheck source=/dev/null
-    . "$pkg_file"
-
-    if is_installed; then
-      echo "Already installed, skipping."
+    case "$status" in
+    0)
+      installed_pkgs+=("$pkg")
+      ;;
+    2)
       skipped_pkgs+=("$pkg")
-    else
-      echo "Installing..."
-
-      set +e # Temporarily disable 'set -e' so a failure doesn't kill the whole script
-      install_package
-      status=$?
-      set -e
-
-      if ((status == 0)); then
-        echo "Install of '$pkg' succeeded."
-        installed_pkgs+=("$pkg")
-      else
-        echo "Install of '$pkg' FAILED."
-        failed_pkgs+=("$pkg")
-      fi
-    fi
-
-    # Cleanup so next package can't accidentally reuse the is_installed and install_package functions
-    unset -f is_installed install_package
+      ;;
+    *)
+      failed_pkgs+=("$pkg")
+      ;;
+    esac
   done
 
   echo
