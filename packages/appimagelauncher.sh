@@ -76,7 +76,7 @@ install_from_github_pkg() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo paru -S --needed --noconfirm appimagelauncher
+    paru -S --needed --noconfirm appimagelauncher
     ;;
 
   ubuntu)
