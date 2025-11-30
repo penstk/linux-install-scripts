@@ -3,14 +3,18 @@ APP_NAME="spotify"
 
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="$APP_NAME"
 CMD_NAME_ARCH="spotify-launcher"
+CMD_NAME_UBUNTU="spotify"
+CMD_NAME_FEDORA="flatpak run com.spotify.Client"
 
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
 ubuntu)
   DEPENDENCIES+=(snapd)
+  ;;
+fedora)
+  DEPENDENCIES+=(flatpak)
   ;;
 esac
 
@@ -24,11 +28,11 @@ is_installed() {
     ;;
 
   ubuntu)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
+    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME_UBUNTU"
     ;;
 
   fedora)
-    is_installed_cmd "$CMD_NAME"
+    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME_FEDORA"
     ;;
 
   *)
@@ -49,12 +53,7 @@ install_package() {
     ;;
 
   fedora)
-    # Enable rpmfusion repositories
-    sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-    sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    # Install
-    sudo dnf install -y lpf-spotify-client
-    lpf update
+    sudo flatpak install flathub com.spotify.Client
     ;;
 
   *)
