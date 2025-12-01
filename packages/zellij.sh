@@ -9,7 +9,7 @@ CMD_NAME="$APP_NAME"
 DEPENDENCIES=()
 case "$DISTRO" in
 ubuntu)
-  DEPENDENCIES+=(rustup)
+  DEPENDENCIES+=(snapd)
   ;;
 esac
 # Load helper scripts
@@ -26,7 +26,7 @@ install_package() {
     ;;
 
   ubuntu)
-    cargo binstall -y zellij --disable-telemetry
+    sudo snap install zellij
     ;;
 
   fedora)
