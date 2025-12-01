@@ -26,7 +26,7 @@ install_package() {
     ;;
 
   ubuntu)
-    sudo snap install zellij
+    sudo snap install zellij --classic
     ;;
 
   fedora)
