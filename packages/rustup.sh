@@ -17,9 +17,29 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  is_installed_cmd "$CMD_NAME" && is_installed_cmd cargo
 }
 
 install_package() {
+  case "$DISTRO" in
+  arch | cachyos)
+    sudo pacman -S --needed --noconfirm rustup
+    rustup default stable
+    ;;
+  ubuntu)
+    sudo apt install -y rustup
+    rustup default stable
+    ;;
+
+  fedora)
+    sudo dnf install -y rustup
+    rustup-init
+    ;;
+
+  *)
+    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
+    return 1
+    ;;
+  esac
   install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }
