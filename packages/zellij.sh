@@ -26,7 +26,7 @@ install_package() {
     ;;
 
   ubuntu)
-    cargo binstall zellij --disable-telemetry
+    cargo binstall -y zellij --disable-telemetry
     ;;
 
   fedora)
