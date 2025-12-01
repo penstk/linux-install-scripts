@@ -117,31 +117,37 @@ install_pkg_from_url() {
 ################################################################################
 install_binary_from_file() {
   local src_path="$1" bin_name="$2" dest_dir="$3"
+  local sudo_prefix=""
 
-  mkdir -p "$dest_dir"
+  # Use sudo if dest_dir is not writable for the current user
+  if [[ ! -w "$dest_dir" ]]; then
+    sudo_prefix="sudo"
+  fi
+
+  $sudo_prefix mkdir -p "$dest_dir"
 
   case "$src_path" in
   *.tar.gz | *.tgz)
     # gzip-compressed tar
-    if ! tar -xzf "$src_path" -C "$dest_dir" "$bin_name"; then
+    if ! $sudo_prefix tar -xzf "$src_path" -C "$dest_dir" "$bin_name"; then
       return 1
     fi
     ;;
   *.tar)
     # uncompressed tar
-    if ! tar -xf "$src_path" -C "$dest_dir" "$bin_name"; then
+    if ! $sudo_prefix tar -xf "$src_path" -C "$dest_dir" "$bin_name"; then
       return 1
     fi
     ;;
   *)
     # plain binary: just copy it to the desired name
-    if ! cp "$src_path" "$dest_dir/$bin_name"; then
+    if ! $sudo_prefix cp "$src_path" "$dest_dir/$bin_name"; then
       return 1
     fi
     ;;
   esac
 
-  chmod +x "$dest_dir/$bin_name" 2>/dev/null || true
+  $sudo_prefix chmod +x "$dest_dir/$bin_name" 2>/dev/null || true
   return 0
 }
 
