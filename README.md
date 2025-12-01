@@ -1,13 +1,19 @@
 ## Missing install scripts
 
-### Systools
-
 - winboat
-
-### Multimedia
-
 - spotify-player # TODO: implement for Fedora & Ubuntu
 
-### FileManagers
+**Yazi prerequisites**
+
+- file
+- ffmpeg
+- 7-Zip
+- jq
+- poppler
+- zoxoide
+- resvg
+- ImageMagick
+- xclip / wl-clipboard / xsel
 
 - yazi
+- zellij # TODO: fix for arch
