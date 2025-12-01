@@ -17,7 +17,7 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME" && is_installed_cmd cargo && is_installed_cmd cargo-binstall
+  is_installed_cmd "$CMD_NAME" && is_installed_cmd cargo && is_installed_cmd "cargo binstall"
 }
 
 install_package() {
