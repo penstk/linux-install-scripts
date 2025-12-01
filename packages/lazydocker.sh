@@ -29,9 +29,9 @@ install_package() {
     ;;
 
   ubuntu | fedora)
-    # Use official install script, but installed to /usr/sbin for all users
+    # Use official install script, but installed to /usr/local/bin for all users
     local url="https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh"
-    curl -fsSL "$url" | sudo DIR=/usr/sbin bash
+    curl -fsSL "$url" | sudo DIR=/usr/local/bin bash
     ;;
 
   *)
