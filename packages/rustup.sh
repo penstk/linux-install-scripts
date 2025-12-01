@@ -17,7 +17,7 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME" && is_installed_cmd cargo
+  is_installed_cmd "$CMD_NAME" && is_installed_cmd cargo && is_installed_cargo-binstall
 }
 
 install_package() {
@@ -25,15 +25,18 @@ install_package() {
   arch | cachyos)
     sudo pacman -S --needed --noconfirm rustup
     rustup default stable
+    cargo install cargo-binstall
     ;;
   ubuntu)
     sudo apt install -y rustup
     rustup default stable
+    cargo install cargo-binstall
     ;;
 
   fedora)
     sudo dnf install -y rustup
     rustup-init -y
+    cargo install cargo-binstall
     ;;
 
   *)
