@@ -5,11 +5,18 @@ APP_NAME="zellij"
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="$APP_NAME"
 
+# Distro-specific dependencies:
+DEPENDENCIES=()
+case "$DISTRO" in
+ubuntu)
+  DEPENDENCIES+=(rustup)
+  ;;
+esac
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
@@ -19,7 +26,7 @@ install_package() {
     ;;
 
   ubuntu)
-    sudo snap install spotify
+    cargo binstall zellij
     ;;
 
   fedora)
