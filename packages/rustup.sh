@@ -33,7 +33,7 @@ install_package() {
 
   fedora)
     sudo dnf install -y rustup
-    rustup-init
+    rustup-init -y
     ;;
 
   *)
