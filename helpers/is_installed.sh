@@ -1,11 +1,18 @@
-# Generic "is installed" check with per-distro command names.
+################################################################################
+# Check if an application is installed
+################################################################################
+#
 #   $1 = app name
+#
+################################################################################
 is_installed_cmd() {
   local app_name=$1
   command -v "$app_name" >/dev/null 2>&1
 }
 
+################################################################################
 # Check if all given dependencies are installed
+################################################################################
 #
 # Usage:
 #   is_installed_deps dep1 dep2 dep3 ...
@@ -13,6 +20,8 @@ is_installed_cmd() {
 # Returns:
 #   0 = all dependencies installed
 #   1 = at least one missing or not installed
+#
+################################################################################
 is_installed_deps() {
   ( # Run in a subshell so sourcing package scripts and unsetting functions does not affect the caller
     set +e
