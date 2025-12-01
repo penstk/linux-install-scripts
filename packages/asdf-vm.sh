@@ -4,6 +4,14 @@ APP_NAME="asdf-vm"
 # Command to check for in PATH.
 CMD_NAME="asdf"
 
+# Distro-specific dependencies:
+DEPENDENCIES=()
+case "$DISTRO" in
+ubuntu | fedora)
+  DEPENDENCIES+=(git)
+  ;;
+esac
+
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/github.sh"
