@@ -16,7 +16,6 @@ DEPENDENCIES=(
   ripgrep        # for fzf-lua
   fd             # for fzf-lua
   nodejs
-  npm
   unzip # for mason.nvim
 )
 

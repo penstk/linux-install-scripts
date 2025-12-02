@@ -67,6 +67,79 @@ install_asdf_from_github() {
   install_binary_from_url "$url" "asdf" "/usr/local/bin"
 }
 
+append_line_if_missing() {
+  local file="$1" line="$2"
+
+  mkdir -p "$(dirname "$file")"
+  [[ -f "$file" ]] || touch "$file"
+
+  # Add the line only if it is not already present verbatim
+  if ! grep -qxF "$line" "$file" 2>/dev/null; then
+    printf '%s\n' "$line" >>"$file"
+  fi
+}
+
+append_fish_asdf_block() {
+  local file="$HOME/.config/fish/config.fish"
+  local marker="# ASDF configuration code"
+  local block='
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
+end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
+'
+
+  mkdir -p "$(dirname "$file")"
+  [[ -f "$file" ]] || touch "$file"
+
+  # Only append once, using the marker as an anchor
+  if ! grep -q "$marker" "$file" 2>/dev/null; then
+    printf '%s\n' "$block" >>"$file"
+  fi
+}
+
+configure_asdf_shells() {
+  # POSIX shells (bash, zsh, generic login shell)
+  local shim_line='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
+
+  append_line_if_missing "$HOME/.bash_profile" "$shim_line"
+  append_line_if_missing "$HOME/.zshrc" "$shim_line"
+  append_line_if_missing "$HOME/.profile" "$shim_line"
+
+  # Fish shell
+  append_fish_asdf_block
+}
+
+# Configure completions for Bash, Zsh, Fish
+configure_asdf_completions() {
+  # Bash completions (simple eval line)
+  local bash_line='. <(asdf completion bash)'
+  append_line_if_missing "$HOME/.bashrc" "$bash_line"
+
+  # Zsh completions
+  mkdir -p "${ASDF_DATA_DIR:-$HOME/.asdf}/completions"
+  asdf completion zsh >"${ASDF_DATA_DIR:-$HOME/.asdf}/completions/_asdf"
+
+  local zsh_fpath_line='fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)'
+  local zsh_compinit_line='autoload -Uz compinit && compinit'
+  append_line_if_missing "$HOME/.zshrc" "$zsh_fpath_line"
+  append_line_if_missing "$HOME/.zshrc" "$zsh_compinit_line"
+
+  # Fish completions
+  local fish_comp_dir="$HOME/.config/fish/completions"
+  mkdir -p "$fish_comp_dir"
+  asdf completion fish >"$fish_comp_dir/asdf.fish" 2>/dev/null || true
+}
+
 # Main package install
 install_package() {
   case "$DISTRO" in
@@ -83,4 +156,7 @@ install_package() {
     return 1
     ;;
   esac
+
+  configure_asdf_shells
+  configure_asdf_completions
 }
