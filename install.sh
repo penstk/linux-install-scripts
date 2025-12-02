@@ -8,15 +8,7 @@ export ROOT_DIR="$SCRIPT_DIR"
 
 PKG_DIR="$SCRIPT_DIR/packages"
 
-DEFAULT_PKG_CONF="$SCRIPT_DIR/packages.conf"
-
-# If no config file is passed as an argument use the default config file
-PKG_CONF="${1:-$DEFAULT_PKG_CONF}"
-
-# If the config file path is not absolute, treat it as relative to the script
-if [[ "$PKG_CONF" != /* ]]; then
-  PKG_CONF="$SCRIPT_DIR/$PKG_CONF"
-fi
+PKG_CONF=""
 
 # --- Detect distro ----------------------------------------------------
 detect_distro() {
@@ -59,47 +51,49 @@ detect_distro() {
   return 1
 }
 
-DISTRO="$(detect_distro)" || {
-  echo "ERROR: Could not detect distro (got '$DISTRO')." >&2
-  exit 1
+prepare_system() {
+  DISTRO="$(detect_distro)" || {
+    echo "ERROR: Could not detect distro (got '$DISTRO')." >&2
+    exit 1
+  }
+  export DISTRO
+  echo "==> Detected distro: $DISTRO"
+
+  # --- Authenticate once with sudo and keepalive ------------------------------
+  echo "==> Asking for sudo once..."
+  sudo -v
+
+  (
+    while true; do
+      sudo -n true 2>/dev/null || exit 0
+      sleep 60
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+  trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+
+  # --- Update all packages before installing ----------------------------------
+  echo "==> Updating system..."
+  case "$DISTRO" in
+  arch | cachyos)
+    sudo pacman -Syu --noconfirm
+    ;;
+  ubuntu)
+    sudo apt-get update
+    sudo apt-get dist-upgrade -y
+    export APT_UPDATED=1
+    ;;
+  fedora)
+    sudo dnf upgrade -y
+    ;;
+  *)
+    echo "ERROR: Unsupported distro '$DISTRO' for system update." >&2
+    exit 1
+    ;;
+  esac
 }
-export DISTRO
-echo "==> Detected distro: $DISTRO"
 
-# --- Authenticate once with sudo and keepalive ------------------------------
-echo "==> Asking for sudo once..."
-sudo -v
-
-(
-  while true; do
-    sudo -n true 2>/dev/null || exit 0
-    sleep 60
-  done
-) &
-SUDO_KEEPALIVE_PID=$!
-trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
-
-# --- Update all packages before installing ----------------------------------
-echo "==> Updating system..."
-case "$DISTRO" in
-arch | cachyos)
-  sudo pacman -Syu --noconfirm
-  ;;
-ubuntu)
-  sudo apt-get update
-  sudo apt-get dist-upgrade -y
-  export APT_UPDATED=1
-  ;;
-fedora)
-  sudo dnf upgrade -y
-  ;;
-*)
-  echo "ERROR: Unsupported distro '$DISTRO' for system update." >&2
-  exit 1
-  ;;
-esac
-
-# --- Read packages from packages.conf ----------------------------------------
+# --- Read packages from config file -------------------------------------------
 read_packages_from_conf() {
   local line first
 
@@ -141,9 +135,6 @@ get_package_dependencies() {
   . "$pkg_file"
   local rc=$?
   set -e
-
-  # Optional debug:
-  # echo "DEBUG: deps for $pkg: ${DEPENDENCIES[*]-<none>}" >&2
 
   # Print dependencies if any
   if ((${#DEPENDENCIES[@]} > 0)); then
@@ -235,19 +226,103 @@ process_package() {
   fi
 }
 
-main() {
-  mapfile -t pkgs < <(read_packages_from_conf)
+usage() {
+  cat >&2 <<EOF
+Usage:
+  $0 -f|--file <packages.conf>   # install from config file
+  $0 <pkg1> [pkg2 ...]           # install given packages
+EOF
+}
 
-  # Build dependency-resolved install order
-  build_install_order "${pkgs[@]}"
+parse_args() {
+  CLI_PKGS=()
+  PKG_CONF=""
 
+  if (($# == 0)); then
+    usage
+    exit 1
+  fi
+
+  while (($# > 0)); do
+    case "$1" in
+    -f | --file)
+      if (($# < 2)); then
+        echo "ERROR: -f/--file requires a file path." >&2
+        usage
+        exit 1
+      fi
+      PKG_CONF="$2"
+      shift 2
+      ;;
+
+    -h | --help)
+      usage
+      exit 0
+      ;;
+
+    --)
+      shift
+      CLI_PKGS+=("$@")
+      break
+      ;;
+
+    -*)
+      echo "ERROR: unknown option '$1'." >&2
+      usage
+      exit 1
+      ;;
+
+    *)
+      CLI_PKGS+=("$1")
+      shift
+      ;;
+    esac
+  done
+
+  # No mixing file + package names
+  if [[ -n "$PKG_CONF" && ${#CLI_PKGS[@]} -gt 0 ]]; then
+    echo "ERROR: cannot use -f/--file and package names at the same time." >&2
+    usage
+    exit 1
+  fi
+}
+
+resolve_packages() {
+  local -a pkgs=()
+
+  if [[ -n "$PKG_CONF" ]]; then
+    # normalize config path
+    if [[ "$PKG_CONF" != /* ]]; then
+      PKG_CONF="$SCRIPT_DIR/$PKG_CONF"
+    fi
+
+    if [[ ! -f "$PKG_CONF" ]]; then
+      echo "ERROR: package config file '$PKG_CONF' not found." >&2
+      exit 1
+    fi
+
+    mapfile -t pkgs < <(read_packages_from_conf)
+  else
+    pkgs=("${CLI_PKGS[@]}")
+  fi
+
+  if ((${#pkgs[@]} == 0)); then
+    echo "ERROR: no packages to install (after parsing args/file)." >&2
+    usage
+    exit 1
+  fi
+
+  # “Return” the array by printing it line by line
+  printf '%s\n' "${pkgs[@]}"
+}
+
+install_and_print_summary() {
   local -a installed_pkgs=()
   local -a failed_pkgs=()
   local -a skipped_pkgs=()
+  local pkg status
 
-  # Install all packages
-
-  for pkg in "${INSTALL_ORDER[@]}"; do
+  for pkg in "$@"; do
     if process_package "$pkg"; then
       status=0
     else
@@ -255,15 +330,9 @@ main() {
     fi
 
     case "$status" in
-    0)
-      installed_pkgs+=("$pkg")
-      ;;
-    2)
-      skipped_pkgs+=("$pkg")
-      ;;
-    *)
-      failed_pkgs+=("$pkg")
-      ;;
+    0) installed_pkgs+=("$pkg") ;;
+    2) skipped_pkgs+=("$pkg") ;;
+    *) failed_pkgs+=("$pkg") ;;
     esac
   done
 
@@ -295,12 +364,25 @@ main() {
     for p in "${failed_pkgs[@]}"; do
       echo "  - $p"
     done
-  else
-    echo
-    echo "FAILED installations: none"
   fi
+}
+
+main() {
+  parse_args "$@"
+
+  # Resolve final package list (from file or CLI)
+  mapfile -t pkgs < <(resolve_packages)
+
+  # Detect distro, ask for sudo, and update system
+  prepare_system
+
+  # Build dependency-resolved install order
+  build_install_order "${pkgs[@]}"
+
+  # Install and print summary
+  install_and_print_summary "${INSTALL_ORDER[@]}"
 
   exit 0
 }
 
-main
+main "$@"
