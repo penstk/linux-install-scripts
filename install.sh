@@ -129,9 +129,9 @@ get_package_dependencies() {
   unset DEPENDENCIES is_installed install_package 2>/dev/null || true
   DEPENDENCIES=()
 
-  # shellcheck source=/dev/null
   # Disable 'set -e' while sourcing in case the package script has something non-fatal
   set +e
+  # shellcheck source=/dev/null
   . "$pkg_file"
   local rc=$?
   set -e
