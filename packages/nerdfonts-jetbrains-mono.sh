@@ -13,6 +13,7 @@ is_installed() {
     ;;
   esac
 
+  # TODO: Fix this function so no fallback is needed
   local pattern="JetBrains.*(Nerd[[:space:]]*Font|NerdFont| NF| NFM| NFP)"
   if fc-list : family 2>/dev/null | grep -Eiq "$pattern"; then
     return 0
@@ -27,6 +28,7 @@ is_installed() {
 
 }
 
+# TODO: Make function more rubust in case of failure
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
