@@ -8,14 +8,19 @@ is_installed() {
   case "$DISTRO" in
   arch | cachyos)
     if pacman -Qq ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
-      return 0 # found
+      return 0
     fi
     ;;
   esac
 
   local pattern="JetBrains.*(Nerd[[:space:]]*Font|NerdFont| NF| NFM| NFP)"
   if fc-list : family 2>/dev/null | grep -Eiq "$pattern"; then
-    return 0 # found
+    return 0
+  fi
+
+  # Fallback: check the manual install location
+  if ls /usr/local/share/fonts/nerd-fonts/JetBrains* >/dev/null 2>&1; then
+    return 0
   fi
 
   return 1 # not found
