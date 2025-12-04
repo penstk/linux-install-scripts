@@ -20,8 +20,10 @@ install_package() {
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd
     ;;
   ubuntu | fedora)
+    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
     sudo mkdir -p /usr/local/share/fonts/nerd-fonts
     sudo tar -xvf JetBrainsMono.tar.xz -C /usr/local/share/fonts/nerd-fonts
+    rm JetBrainsMono.tar.xz
     sudo fc-cache
     ;;
   *)
