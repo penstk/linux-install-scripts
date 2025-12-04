@@ -4,7 +4,7 @@
 DEPENDENCIES=(
   neovim
   git                      # for partial clones support
-  nerd-font-jetbrains-mono # needed to display some icons
+  nerdfonts-jetbrains-mono # needed to display some icons
   lazygit
   curl # for nvim-treesitter
   gcc  # for nvim-treesitter
