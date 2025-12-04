@@ -23,20 +23,33 @@ is_installed() {
 }
 
 install_package() {
-  case "$DISTRO" in
-  arch | cachyos)
-    paru -S --needed --noconfirm lazydocker
-    ;;
+  # Install asdf-nodejs plugin
+  asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
 
-  ubuntu | fedora)
-    # Use official install script, but installed to /usr/local/bin for all users
-    local url="https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh"
-    curl -fsSL "$url" | sudo DIR=/usr/local/bin bash
-    ;;
+  # Install nodejs
+  asdf install lazydocker latest
 
-  *)
-    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
-    return 1
-    ;;
-  esac
+  # Set a version
+  asdf set -u lazydocker latest
+
+  # Ensure shims are regenerated
+  asdf reshim nodejs || true
+
+  ##### Old binary installation -> replaced by asdf install
+  # case "$DISTRO" in
+  # arch | cachyos)
+  #   paru -S --needed --noconfirm lazydocker
+  #   ;;
+  #
+  # ubuntu | fedora)
+  #   # Use official install script, but installed to /usr/local/bin for all users
+  #   local url="https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh"
+  #   curl -fsSL "$url" | sudo DIR=/usr/local/bin bash
+  #   ;;
+  #
+  # *)
+  #   echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
+  #   return 1
+  #   ;;
+  # esac
 }
