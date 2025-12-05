@@ -13,7 +13,7 @@ DEPENDENCIES=(
 )
 
 # AUR repostitory with the sourcecode to built
-REPO_URL="https://aur.archlinux.org/paru.git"
+REPO_URL="https://aur.archlinux.org/yay.git"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
