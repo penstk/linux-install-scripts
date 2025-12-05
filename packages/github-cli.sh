@@ -7,6 +7,7 @@ CMD_NAME="gh"
 
 # Packages that should be installed before installing this package.
 # Each entry must correspond to another package script in the packages directory (without .sh).
+# shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
   git
 )
@@ -15,7 +16,7 @@ DEPENDENCIES=(
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME" && is_installed_deps "${DEPENDENCIES[@]}"
+  is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
