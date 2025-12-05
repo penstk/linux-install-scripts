@@ -7,12 +7,8 @@ DEPENDENCIES=(
   git
 )
 
-zshrc_path() {
-  echo "${ZDOTDIR:-$HOME}/.zshrc"
-}
-
 is_installed() {
-  [[ -d "${ZDOTDIR:-$HOME}/.oh-my-zsh" ]]
+  [[ -d "$HOME/.oh-my-zsh" ]]
 }
 
 install_package() {
