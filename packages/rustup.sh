@@ -28,7 +28,7 @@ install_package() {
     cargo install cargo-binstall
     ;;
   ubuntu)
-    sudo apt install -y rustup
+    sudo apt-get install -y rustup
     rustup default stable
     cargo install cargo-binstall
     ;;

@@ -26,7 +26,7 @@ install_package() {
     ;;
 
   ubuntu)
-    sudo apt install -y snapd
+    sudo apt-get install -y snapd
     ;;
 
   fedora)

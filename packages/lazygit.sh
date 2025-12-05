@@ -30,7 +30,7 @@ install_package() {
 
     if ((major > 25 || (major == 25 && minor >= 10))); then
       # Ubuntu 25.10+ → lazygit is in the repo
-      sudo apt install -y lazygit
+      sudo apt-get install -y lazygit
     else
       # Ubuntu 25.04 and earlier → install from GitHub
       tmpdir="$(mktemp -d)"

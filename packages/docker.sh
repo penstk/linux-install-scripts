@@ -29,7 +29,7 @@ install_package() {
 
     # Set up Docker's apt repository.
     # Add Docker's official GPG key:
-    sudo apt update
+    sudo apt-get update
     sudo apt -y install ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -44,7 +44,7 @@ Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 EOF
 
-    sudo apt update
+    sudo apt-get update
 
     # Install the Docker packages.
     sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
