@@ -22,12 +22,11 @@ is_installed() {
     ;;
 
   ubuntu)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "spotify"
+    is_installed_cmd "spotify"
     ;;
 
   fedora)
-    is_installed_deps "${DEPENDENCIES[@]}" && flatpak info com.spotify.Client &>/dev/null
-
+    flatpak info com.spotify.Client &>/dev/null
     ;;
 
   *)
