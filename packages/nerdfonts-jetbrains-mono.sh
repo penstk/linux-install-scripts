@@ -5,22 +5,19 @@ APP_NAME="JetBrainsMono Nerd Font"
 . "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  case "$DISTRO" in
-  arch | cachyos)
-    if pacman -Qq ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
-      return 0
-    fi
-    ;;
-  esac
+  # case "$DISTRO" in
+  # arch | cachyos)
+  #   if pacman -Qq ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
+  #     return 0
+  #   fi
+  #   ;;
+  # esac
 
-  # TODO: Fix this function so no fallback is needed
-  local pattern="JetBrains.*(Nerd[[:space:]]*Font|NerdFont| NF| NFM| NFP)"
-  if fc-list : family 2>/dev/null | grep -Eiq "$pattern"; then
-    return 0
-  fi
-
-  # Fallback: check the manual install location
-  if ls /usr/local/share/fonts/nerd-fonts/JetBrains* >/dev/null 2>&1; then
+  # Check fontconfig’s view of installed fonts
+  local match pattern
+  pattern='jetbrains.*nerd'
+  match="$(fc-match -s 'JetBrainsMono Nerd Font' 2>/dev/null | head -n 1)"
+  if echo "$match" | grep -Eiq "$pattern"; then
     return 0
   fi
 
@@ -28,18 +25,21 @@ is_installed() {
 
 }
 
-# TODO: Make function more rubust in case of failure
 install_package() {
+  local tmpdir
+
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd
+    sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd || return 1
     ;;
   ubuntu | fedora)
-    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
-    sudo mkdir -p /usr/local/share/fonts/nerd-fonts
-    sudo tar -xvf JetBrainsMono.tar.xz -C /usr/local/share/fonts/nerd-fonts
-    rm JetBrainsMono.tar.xz
-    sudo fc-cache
+    tmpdir="$(mktemp -d)" || return 1
+    trap 'rm -rf "$tmpdir"' RETURN
+
+    curl -fLo "$tmpdir/JetBrainsMono.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz || return 1
+    sudo mkdir -p /usr/local/share/fonts/nerd-fonts || return 1
+    sudo tar -xf "$tmpdir/JetBrainsMono.tar.xz" -C /usr/local/share/fonts/nerd-fonts || return 1
+    sudo fc-cache -f || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
