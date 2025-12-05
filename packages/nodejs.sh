@@ -1,20 +1,15 @@
-APP_NAME="nodejs"
-
-# Command to check for in PATH.
-# Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="node"
-
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 # Packages that should be installed before installing this package.
 # Each entry must correspond to another package script in the packages directory (without .sh).
+# shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
   asdf-vm
 )
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  is_installed_cmd "node"
 }
 
 install_package() {
