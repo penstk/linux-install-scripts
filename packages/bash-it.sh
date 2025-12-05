@@ -6,7 +6,16 @@ DEPENDENCIES=(
 )
 
 is_installed() {
-  [[ -d "$HOME/.bash_it" ]]
+  if [[ -d "$HOME/.bash_it" ]]; then
+    return 0
+  fi
+
+  if [[ -d "$HOME/.oh-my-bash" ]]; then
+    echo "==> Skipping bash-it: oh-my-bash already installed"
+    return 0
+  fi
+
+  return 1
 }
 
 install_package() {
