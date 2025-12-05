@@ -198,6 +198,11 @@ install_via_aur() {
 
   case "$DISTRO" in
   arch | cachyos)
+    if ! pacman -T "$(pacman -Sgq base-devel)" >/dev/null 2>&1; then
+      echo "==> Installing base-devel (required for AUR builds)..."
+      sudo pacman -S --needed --noconfirm base-devel
+    fi
+
     TMPDIR="$(mktemp -d -t "${app_name}-build-XXXXXXXXXX")"
     echo "Using temp dir: $TMPDIR"
     trap 'rm -rf "$TMPDIR"' RETURN
@@ -232,18 +237,8 @@ install_via_aur() {
     fi
     ;;
 
-  ubuntu)
-    echo "$app_name is not implemented for Ubuntu" >&2
-    return 1
-    ;;
-
-  fedora)
-    echo "$app_name is not implemented for Fedora" >&2
-    return 1
-    ;;
-
   *)
-    echo "$app_name: Unsupported distro '$DISTRO'." >&2
+    echo "$app_name: AUR install is not supporteted for '$DISTRO'." >&2
     return 1
     ;;
   esac

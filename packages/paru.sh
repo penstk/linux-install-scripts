@@ -9,7 +9,6 @@ CMD_NAME="$APP_NAME"
 # Each entry must correspond to another package script in the packages directory (without .sh).
 DEPENDENCIES=(
   git
-  base-devel
 )
 
 # AUR repostitory with the sourcecode to built
