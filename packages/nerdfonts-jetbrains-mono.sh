@@ -22,7 +22,6 @@ is_installed() {
   fi
 
   return 1 # not found
-
 }
 
 install_package() {
