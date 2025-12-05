@@ -24,7 +24,7 @@ is_installed() {
     ;;
 
   ubuntu)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
+    is_installed_cmd "$CMD_NAME"
     ;;
 
   fedora)
