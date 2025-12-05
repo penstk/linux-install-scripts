@@ -16,7 +16,7 @@ esac
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
+  is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
