@@ -24,11 +24,11 @@ esac
 is_installed() {
   case "$DISTRO" in
   arch | cachyos)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME_ARCH"
+    is_installed_cmd "$CMD_NAME_ARCH"
     ;;
 
   ubuntu | fedora)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "$CMD_NAME"
+    is_installed_cmd "$CMD_NAME"
     ;;
 
   *)
