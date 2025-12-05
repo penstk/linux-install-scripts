@@ -20,5 +20,5 @@ is_installed() {
 
 install_package() {
   git clone --depth=1 https://github.com/Bash-it/bash-it.git "$HOME/.bash_it"
-  bash "$HOME/.bash_it/install.sh"
+  bash "$HOME/.bash_it/install.sh --append-to-config --silent"
 }
