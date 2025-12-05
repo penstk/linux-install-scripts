@@ -5,20 +5,20 @@ APP_NAME="JetBrainsMono Nerd Font"
 . "$ROOT_DIR/helpers/install.sh"
 
 is_installed() {
-  # case "$DISTRO" in
-  # arch | cachyos)
-  #   if pacman -Qq ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
-  #     return 0
-  #   fi
-  #   ;;
-  # esac
+  case "$DISTRO" in
+  arch | cachyos)
+    if pacman -Qq ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
+      return 0
+    fi
+    ;;
+  esac
 
   # Check fontconfig’s view of installed fonts
   local match pattern
   pattern='jetbrains.*nerd'
   match="$(fc-match -s 'JetBrainsMono Nerd Font' 2>/dev/null | head -n 1)"
   if echo "$match" | grep -Eiq "$pattern"; then
-    return 0
+    return 0 # found
   fi
 
   return 1 # not found
