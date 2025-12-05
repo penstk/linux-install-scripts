@@ -21,10 +21,10 @@ esac
 is_installed() {
   case "$DISTRO" in
   fedora)
-    is_installed_deps "${DEPENDENCIES[@]}" && flatpak info org.ferdium.Ferdium &>/dev/null
+    flatpak info org.ferdium.Ferdium &>/dev/null
     ;;
   *)
-    is_installed_deps "${DEPENDENCIES[@]}" && is_installed_cmd "ferdium"
+    is_installed_cmd "ferdium"
     ;;
   esac
 }
