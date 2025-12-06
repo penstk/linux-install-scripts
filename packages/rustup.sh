@@ -81,6 +81,4 @@ install_package() {
   esac
 
   configure_cargo_shells
-
-  cargo install cargo-binstall
 }
