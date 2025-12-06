@@ -56,9 +56,6 @@ configure_cargo_shells() {
   append_line_if_missing "$HOME/.profile" "$cargo_line"
 
   append_fish_cargo_block
-
-  # Make Cargo-installed binaries available during this install run
-  export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
 }
 
 is_installed() {
