@@ -21,4 +21,19 @@ is_installed() {
 
 install_package() {
   curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh | bash
+
+  # Add .bashrc to .bash_profile
+  local bash_profile="$HOME/.bash_profile"
+
+  if [[ -f "$bash_profile" ]]; then
+    if ! grep -Eq '(^|\s)(\.|source)\s+(\$HOME|~/)\.bashrc' "$bash_profile"; then
+      {
+        echo
+        echo 'if [[ -f ~/.bashrc ]]; then'
+        echo '  source ~/.bashrc'
+        echo 'fi'
+      } >>"$bash_profile"
+      echo "==> Updated ~/.bash_profile to source ~/.bashrc for oh-my-bash"
+    fi
+  fi
 }
