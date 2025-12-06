@@ -56,6 +56,9 @@ configure_cargo_shells() {
   append_line_if_missing "$HOME/.profile" "$cargo_line"
 
   append_fish_cargo_block
+
+  # Make Cargo-installed binaries available during this install run
+  export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
 }
 
 is_installed() {
@@ -63,30 +66,24 @@ is_installed() {
 }
 
 install_package() {
+  if ! install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"; then
+    return 1
+  fi
+
   case "$DISTRO" in
-  arch | cachyos)
-    sudo pacman -S --needed --noconfirm rustup
+  arch | cachyos | ubuntu)
     rustup default stable
-    cargo install cargo-binstall
     ;;
-  ubuntu)
-    sudo apt-get install -y rustup
-    rustup default stable
-    cargo install cargo-binstall
-    ;;
-
   fedora)
-    sudo dnf install -y rustup
     rustup-init -y
-    cargo install cargo-binstall
     ;;
-
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
     return 1
     ;;
   esac
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 
   configure_cargo_shells
+
+  cargo install cargo-binstall
 }
