@@ -24,7 +24,7 @@ install_package() {
     sudo dnf install -y "p7zip" "p7zip-plugins"
     ;;
   *)
-    echo "$app_name: Unsupported distro '$DISTRO'." >&2
+    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
     return 1
     ;;
   esac
