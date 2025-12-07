@@ -60,7 +60,7 @@ install_pkg_from_file() {
 
   case "$pkg" in
   *.deb)
-    sudo dpkg -i "$pkg" || sudo apt-get install -f -y
+    sudo apt-get install -y "$pkg"
     ;;
   *.rpm)
     sudo dnf install -y "$pkg"
