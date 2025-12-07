@@ -43,7 +43,7 @@ install_package() {
     ;;
 
   fedora)
-    sudo dnf copr enable lihaohong/yazi
+    sudo dnf copr enable -y lihaohong/yazi
     sudo dnf install -y yazi
     ;;
 
