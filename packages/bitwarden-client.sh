@@ -4,11 +4,11 @@ APP_NAME="bitwarden-client"
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
-arch | cachyos | fedora)
-  DEPENDENCIES+=(flatpak)
-  ;;
 ubuntu)
   DEPENDENCIES+=(snapd)
+  ;;
+fedora)
+  DEPENDENCIES+=(flatpak)
   ;;
 esac
 
@@ -17,26 +17,31 @@ esac
 
 is_installed() {
   case "$DISTRO" in
-  arch | cachyos | fedora)
-    flatpak info com.bitwarden.desktop &>/dev/null
+  arch | cachyos)
+    is_installed_cmd "bitwarden-desktop"
     ;;
-  *)
+  ubuntu)
     is_installed_cmd "bitwarden"
+    ;;
+  fedora)
+    flatpak info com.bitwarden.desktop &>/dev/null
     ;;
   esac
 }
 
 install_package() {
   case "$DISTRO" in
-  arch | cachyos | fedora)
-    sudo flatpak install -y flathub com.bitwarden.desktop
+  arch | cachyos)
+    sudo pacman -S --needed --noconfirm bitwarden
     ;;
 
   ubuntu)
     sudo snap install bitwarden
     sudo snap connect bitwarden:password-manager-service
     ;;
-
+  fedora)
+    sudo flatpak install -y flathub com.bitwarden.desktop
+    ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
     return 1
