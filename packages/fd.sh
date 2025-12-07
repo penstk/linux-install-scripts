@@ -1,5 +1,5 @@
 # Application name (used in logs / messages)
-APP_NAME="resvg"
+APP_NAME="fd"
 
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
