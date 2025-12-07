@@ -117,6 +117,13 @@ configure_asdf_shells() {
 
   # Fish shell
   append_fish_asdf_block
+
+  # Make sure shims are available in the current shell session, that runs the install.sh script
+  local shim_dir="${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+  case ":$PATH:" in
+  *":$shim_dir:"*) ;;
+  *) export PATH="$shim_dir:$PATH" ;;
+  esac
 }
 
 # Configure completions for Bash, Zsh, Fish
