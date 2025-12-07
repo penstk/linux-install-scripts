@@ -1,16 +1,16 @@
 # Application name (used in logs / messages)
-APP_NAME="resvg"
+APP_NAME="poppler-utils"
 
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="$APP_NAME"
+CMD_NAME="pdftotext"
 
 # Package names in each distro's package manager.
 # Set to "" if this package is not available on that distro.
 # Keep "$APP_NAME" when the package name matches APP_NAME.
-ARCH_PKG="$APP_NAME"
-UBUNTU_PKG="$APP_NAME"
-FEDORA_PKG="$APP_NAME"
+ARCH_PKG="poppler"
+UBUNTU_PKG="poppler-utils"
+FEDORA_PKG="poppler-utils"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"

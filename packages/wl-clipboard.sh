@@ -1,9 +1,9 @@
 # Application name (used in logs / messages)
-APP_NAME="resvg"
+APP_NAME="wl-clipboard"
 
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="$APP_NAME"
+CMD_NAME="wl-copy"
 
 # Package names in each distro's package manager.
 # Set to "" if this package is not available on that distro.
