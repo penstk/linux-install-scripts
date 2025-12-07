@@ -1,13 +1,15 @@
-# Application name (used in logs / messages)
-# Command to check for in PATH.
-# Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="authenticator"
-
-# Load helper scripts
-. "$ROOT_DIR/helpers/is_installed.sh"
-
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  case "$DISTRO" in
+  arch | cachyos)
+    is_installed_cmd "authenticator"
+    ;;
+  ubuntu)
+    is_installed_cmd "yubioath-desktop"
+    ;;
+  fedora)
+    flatpak info com.yubico.yubioath &>/dev/null
+    ;;
+  esac
 }
 
 install_package() {
