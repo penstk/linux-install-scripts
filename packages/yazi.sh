@@ -19,9 +19,15 @@ DEPENDENCIES=(
   fzf
   zoxide
   imagemagick
-  wl-clipboard
-  xclip
 )
+# Install wl-clipboard only if in wayland session
+if [ "${XDG_SESSION_TYPE-}" = "wayland" ]; then
+  DEPENDENCIES+=(wl-clipboard)
+fi
+# Install wl-clipboard only if in x11 session
+if [ "${XDG_SESSION_TYPE-}" = "x11" ]; then
+  DEPENDENCIES+=(xclip)
+fi
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
