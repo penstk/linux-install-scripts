@@ -59,14 +59,19 @@ is_installed_asdf() {
   local app_name=$1
   local version=${2:-}
 
-  # Does the python plugin exist in asdf?
+  # Does the plugin exist in asdf?
   if ! asdf plugin list 2>/dev/null | grep -qx -- "$app_name"; then
     return 1
   fi
 
   if [ -z "$version" ]; then
     # No version given -> Does asdf have any version installed?
-    if ! asdf list "$app_name" >/dev/null 2>&1; then
+    local list_output
+    list_output="$(asdf list "$app_name" 2>/dev/null || true)"
+
+    # If output is empty or explicitly says there are no versions, treat as not installed
+    if [ -z "$list_output" ] || printf '%s\n' "$list_output" |
+      grep -iqE 'no[[:space:]]+[[:alpha:][:space:]]*versions[[:space:]]+installed'; then
       return 1
     fi
   else
