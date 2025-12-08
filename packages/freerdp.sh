@@ -21,7 +21,7 @@ install_package() {
     sudo pacman -S --needed --noconfirm "freerdp"
     ;;
   ubuntu)
-    sudo apt-get install -y "freerdp2-x11" "freerdp2-wayland"
+    sudo apt-get install -y "freerdp3-x11" "freerdp3-wayland"
     ;;
   fedora)
     sudo dnf install -y "freerdp"
