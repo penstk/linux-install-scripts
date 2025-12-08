@@ -15,37 +15,6 @@ is_installed_cmd() {
 }
 
 ################################################################################
-# Check if an application is installed via asdf-vm
-################################################################################
-#
-#   $1 = app name
-#
-################################################################################
-is_installed_asdf() {
-  local app_name=$1
-  local version=${2:-}
-
-  # Does the python plugin exist in asdf?
-  if ! asdf plugin list 2>/dev/null | grep -qx -- "$app_name"; then
-    return 1
-  fi
-
-  if [ -z "$version" ]; then
-    # No version given -> Does asdf have any version installed?
-    if ! asdf list "$app_name" >/dev/null 2>&1; then
-      return 1
-    fi
-  else
-    # Version given -> Check if the version appears anywhere in the output
-    if ! asdf list "$app_name" 2>/dev/null | grep -q -- "$version"; then
-      return 1
-    fi
-  fi
-
-  return 0
-}
-
-################################################################################
 # Check if all given dependencies are installed
 ################################################################################
 #
