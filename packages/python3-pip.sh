@@ -19,9 +19,14 @@ FEDORA_PKG="python3-pip"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
-  # All dependencies installed AND we have either pip3 or pip
-  is_installed_deps "${DEPENDENCIES[@]}" &&
-    { is_installed_cmd pip3 || is_installed_cmd pip; }
+  # Check if all dependencies installed
+  is_installed_deps "${DEPENDENCIES[@]}" || return 1
+
+  # Check if pip package is installed
+  is_installed_pkg "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" || return 1
+
+  # Check if pip3 or pip command is availabe
+  is_installed_cmd pip3 || is_installed_cmd pip || return 1
 }
 
 install_package() {

@@ -11,42 +11,12 @@ FEDORA_PKG="python3"
 # Load helper scripts
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
-# Helper: check if given command exists and is Python 3.x
-_python_cmd_is_v3() {
-  local cmd=$1
-
-  # Command must exist
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    return 1
-  fi
-
-  # Capture version string safely - do not tregger set -e aborts
-  local out
-  if ! out=$("$cmd" --version 2>&1); then
-    return 1
-  fi
-
-  # Expected format: "Python 3.x.y"
-  # Strip leading "Python " if present
-  out=${out#Python }
-
-  # Extract major part before first dot
-  local major=${out%%.*}
-
-  [[ "$major" == "3" ]]
-}
-
-# Check if either "python" or "python3" exists and is version 3.x
 is_installed() {
-  if _python_cmd_is_v3 python; then
-    return 0
-  fi
+  # Check if python package is installed and has version 3.*
+  is_installed_pkg "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" "3" || return 1
 
-  if _python_cmd_is_v3 python3; then
-    return 0
-  fi
-
-  return 1
+  # Check if 'python' or 'python3' command is available
+  is_installed_cmd python || is_installed_cmd python3 || return 1
 }
 
 install_package() {

@@ -14,7 +14,8 @@ DEPENDENCIES=(
 
 # Check if already installed
 is_installed() {
-  is_installed_pkg "$APP_NAME"
+  # Check if winboat package is installed via package manager
+  is_installed_pkg winboat-bin winboat winboat
 }
 
 # Get system architecture to find the correct package

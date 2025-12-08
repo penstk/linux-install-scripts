@@ -111,36 +111,65 @@ install_pkg_from_url() {
 #   $1 = arch package name
 #   $2 = ubuntu package name
 #   $3 = fedora package name
+#   $4 = version string to match (optional, substring match, like is_installed_asdf)
 #
 ################################################################################
 is_installed_pkg() {
   local arch_pkg=$1
   local ubuntu_pkg=$2
   local fedora_pkg=$3
+  local version=${4:-}
 
   case "$DISTRO" in
   arch | cachyos)
     [[ -z "$arch_pkg" ]] && return 1 # if package name is empty, treat it as not installed
-    if pacman -Q "$arch_pkg" >/dev/null 2>&1; then
-      return 0 # installed
+
+    if [[ -z "$version" ]]; then
+      # No version given -> Check if app is installed"
+      if ! pacman -Q "$arch_pkg" >/dev/null 2>&1; then
+        return 1
+      fi
+    else
+      # Version given -> Check if app is installed and has correct version
+      if ! pacman -Q "$arch_pkg" 2>/dev/null | grep -q -- "$version"; then
+        return 1
+      fi
     fi
-    return 1 # not installed
+    return 0
     ;;
 
   ubuntu)
     [[ -z "$ubuntu_pkg" ]] && return 1 # if package name is empty, treat it as not installed
-    if dpkg -s "$ubuntu_pkg" >/dev/null 2>&1; then
-      return 0 # installed
+
+    if [[ -z "$version" ]]; then
+      # No version given -> Check if app is installed"
+      if ! dpkg -s "$ubuntu_pkg" >/dev/null 2>&1; then
+        return 1
+      fi
+    else
+      # Version given -> Check if app is installed and has correct version
+      if ! dpkg-query -W -f='${Version}\n' "$ubuntu_pkg" 2>/dev/null | grep -q -- "$version"; then
+        return 1
+      fi
     fi
-    return 1 # not installed
+    return 0
     ;;
 
   fedora)
     [[ -z "$fedora_pkg" ]] && return 1 # if package name is empty, treat it as not installed
-    if rpm -q "$fedora_pkg" >/dev/null 2>&1; then
-      return 0 # installed
+
+    if [[ -z "$version" ]]; then
+      # No version given -> Check if app is installed"
+      if ! rpm -q "$fedora_pkg" >/dev/null 2>&1; then
+        return 1
+      fi
+    else
+      # Version given -> Check if app is installed and has correct version
+      if ! rpm -q "$fedora_pkg" 2>/dev/null | grep -q -- "$version"; then
+        return 1
+      fi
     fi
-    return 1 # not installed
+    return 0
     ;;
 
   *)
