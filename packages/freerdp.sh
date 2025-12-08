@@ -5,6 +5,15 @@ APP_NAME="freerdp"
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
+  case "$DISTRO" in
+  arch | cachyos)
+    is_installed_cmd "xfreerdp3" && is_installed_cmd "wlfreerdp3"
+    ;;
+  ubuntu | fedora)
+    is_installed_cmd "xfreerdp" && is_installed_cmd "wlfreerdp"
+    ;;
+  esac
+
   is_installed_cmd "xfreerdp3" && is_installed_cmd "wlfreerdp3"
 }
 
