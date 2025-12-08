@@ -1,5 +1,5 @@
 ################################################################################
-# Check if an application is in PATH
+# Check whether the name is a valid command in the current shell
 ################################################################################
 #
 #   $1 = app name
