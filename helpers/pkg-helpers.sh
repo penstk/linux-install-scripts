@@ -20,7 +20,12 @@ install_via_pkgmgr() {
       echo "$app_name: Arch/CachyOS install not implemented." >&2
       return 1
     fi
-    sudo pacman -S --needed --noconfirm "$arch_pkg"
+    if command -v paru >/dev/null 2>&1; then
+      paru -S --needed --noconfirm "$arch_pkg"
+    else
+      # Fall back to pacman if paru is not installed
+      sudo pacman -S --needed --noconfirm "$arch_pkg"
+    fi
     ;;
   ubuntu)
     if [[ -z "$ubuntu_pkg" ]]; then
