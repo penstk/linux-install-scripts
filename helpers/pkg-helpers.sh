@@ -103,3 +103,49 @@ install_pkg_from_url() {
   rm -rf "$tmpdir"
   return "$rc"
 }
+
+################################################################################
+# Check if a package is installed via the distro's native package manager
+################################################################################
+#
+#   $1 = arch package name
+#   $2 = ubuntu package name
+#   $3 = fedora package name
+#
+################################################################################
+is_installed_pkg() {
+  local arch_pkg=$1
+  local ubuntu_pkg=$2
+  local fedora_pkg=$3
+
+  case "$DISTRO" in
+  arch | cachyos)
+    [[ -z "$arch_pkg" ]] && return 1 # if package name is empty, treat it as not installed
+    if pacman -Q "$arch_pkg" >/dev/null 2>&1; then
+      return 0 # installed
+    fi
+    return 1 # not installed
+    ;;
+
+  ubuntu)
+    [[ -z "$ubuntu_pkg" ]] && return 1 # if package name is empty, treat it as not installed
+    if dpkg -s "$ubuntu_pkg" >/dev/null 2>&1; then
+      return 0 # installed
+    fi
+    return 1 # not installed
+    ;;
+
+  fedora)
+    [[ -z "$fedora_pkg" ]] && return 1 # if package name is empty, treat it as not installed
+    if rpm -q "$fedora_pkg" >/dev/null 2>&1; then
+      return 0 # installed
+    fi
+    return 1 # not installed
+    ;;
+
+  *)
+    echo "Unsupported distro '$DISTRO'." >&2
+    return 1
+    ;;
+  esac
+}

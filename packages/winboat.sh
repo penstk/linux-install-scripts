@@ -14,30 +14,7 @@ DEPENDENCIES=(
 
 # Check if already installed
 is_installed() {
-  case "$DISTRO" in
-  arch | cachyos)
-    if pacman -Q winboat >/dev/null 2>&1 ||
-      pacman -Q winboat-bin >/dev/null 2>&1 ||
-      pacman -Q winboat-electron >/dev/null 2>&1; then
-      return 0
-    fi
-    return 1
-    ;;
-
-  ubuntu)
-    if dpkg -s winboat >/dev/null 2>&1; then
-      return 0
-    fi
-    return 1
-    ;;
-
-  fedora)
-    if dnf -q list installed winboat >/dev/null 2>&1; then
-      return 0
-    fi
-    return 1
-    ;;
-  esac
+  is_installed_pkg "$APP_NAME"
 }
 
 # Get system architecture to find the correct package
