@@ -12,7 +12,6 @@ is_installed() {
   fi
 
   if [[ -d "$HOME/.bash_it" ]]; then
-    echo "==> Skipping oh-my-bash: bash-it already installed"
     return 0
   fi
 
