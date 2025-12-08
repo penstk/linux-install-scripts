@@ -6,10 +6,10 @@ APP_NAME="freerdp"
 
 is_installed() {
   case "$DISTRO" in
-  arch | cachyos)
+  arch | cachyos | ubuntu)
     is_installed_cmd "xfreerdp3" && is_installed_cmd "wlfreerdp3"
     ;;
-  ubuntu | fedora)
+  fedora)
     is_installed_cmd "xfreerdp" && is_installed_cmd "wlfreerdp"
     ;;
   esac
