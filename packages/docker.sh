@@ -77,13 +77,11 @@ EOF
   esac
 
   # Create the docker group.
-  sudo groupadd docker
+  sudo groupadd -f docker
   # Add the current user to the docker group.
   sudo usermod -aG docker "$USER"
-  # Activate the changes to group
-  newgrp docker
-  # Ensure user owns the ~/.docker/ directory and set permissions
-  sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
-  sudo chmod g+rwx "$HOME/.docker" -R
-
+  # Ensure ~/.docker exists and has correct ownership & permissions
+  mkdir -p "$HOME/.docker"
+  sudo chown -R "$USER":"$USER" "$HOME"/.docker
+  sudo chmod -R g+rwx "$HOME/.docker"
 }
