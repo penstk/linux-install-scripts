@@ -6,7 +6,7 @@ CMD_NAME="codex"
 # Each entry must correspond to another package script in the packages directory (without .sh).
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
-  nodejs
+  nodejs_asdf
 )
 
 # Load helper scripts

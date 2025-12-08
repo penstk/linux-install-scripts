@@ -17,7 +17,7 @@ REPO_URL="https://aur.archlinux.org/paru.git"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/aur-helpers.sh"
 
 is_installed() {
   is_installed_cmd "$CMD_NAME"

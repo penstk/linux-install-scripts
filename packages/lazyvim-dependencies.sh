@@ -3,19 +3,19 @@
 
 DEPENDENCIES=(
   neovim
+  python3
+  python3-pip
+  neovim-pynvim            # support for python plugins in Nvim
   git                      # for partial clones support
   nerdfonts-jetbrains-mono # needed to display some icons
   lazygit
   curl # for nvim-treesitter
   gcc  # for nvim-treesitter
   # tree-sitter-cli # for nvim-treesitter
-  python3
-  python3-pip
-  python3-pynvim # support for python plugins in Nvim
-  fzf            # for fzf-lua
-  ripgrep        # for fzf-lua
-  fd             # for fzf-lua
-  nodejs
+  fzf     # for fzf-lua
+  ripgrep # for fzf-lua
+  fd      # for fzf-lua
+  nodejs_asdf
   unzip # for mason.nvim
 )
 

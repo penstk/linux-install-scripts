@@ -6,6 +6,7 @@ APP_NAME="winboat"
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
   docker
+  freerdp
 )
 # Load helper scripts
 . "$ROOT_DIR/helpers/github.sh"
