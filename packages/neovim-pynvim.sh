@@ -5,7 +5,6 @@ APP_NAME="pynvim"
 # Each entry must correspond to another package script in the packages directory (without .sh).
 DEPENDENCIES=(
   python3
-  neovim
 )
 
 # Package names in each distro's package manager.

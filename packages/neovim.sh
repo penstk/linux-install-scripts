@@ -5,6 +5,14 @@ APP_NAME="neovim"
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="nvim"
 
+# Packages that should be installed before installing this package.
+# Each entry must correspond to another package script in the packages directory (without .sh).
+# shellcheck disable=SC2034 # used by install.sh dependency resolver
+DEPENDENCIES=(
+  neovim-pynvim
+  neovim-npm_npm
+)
+
 # Package names in each distro's package manager.
 # Set to "" if this package is not available on that distro.
 # Keep "$APP_NAME" when the package name matches APP_NAME.
@@ -17,7 +25,11 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  # Check if all dependencies installed
+  is_installed_deps "${DEPENDENCIES[@]}" || return 1
+
+  # Check if neovim is installed
+  is_installed_cmd "$CMD_NAME" || return 1
 }
 
 install_package() {
