@@ -13,8 +13,6 @@ is_installed() {
     is_installed_cmd "xfreerdp" && is_installed_cmd "wlfreerdp"
     ;;
   esac
-
-  is_installed_cmd "xfreerdp3" && is_installed_cmd "wlfreerdp3"
 }
 
 install_package() {
