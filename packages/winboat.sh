@@ -9,7 +9,7 @@ DEPENDENCIES=(
   freerdp
 )
 # Load helper scripts
-. "$ROOT_DIR/helpers/github.sh"
+. "$ROOT_DIR/helpers/github-helpers.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 # Check if already installed
