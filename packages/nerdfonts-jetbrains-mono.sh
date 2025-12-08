@@ -2,7 +2,7 @@
 APP_NAME="JetBrainsMono Nerd Font"
 
 # Load helper scripts
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
   case "$DISTRO" in

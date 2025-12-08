@@ -9,7 +9,7 @@ UBUNTU_PKG="python3"
 FEDORA_PKG="python3"
 
 # Load helper scripts
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 # Helper: check if given command exists and is Python 3.x
 _python_cmd_is_v3() {

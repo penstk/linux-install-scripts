@@ -16,7 +16,7 @@ FEDORA_PKG="python3-pip"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
   # All dependencies installed AND we have either pip3 or pip

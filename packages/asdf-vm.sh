@@ -15,7 +15,7 @@ esac
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/github.sh"
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/bin-helpers.sh"
 
 # Check if already installed
 is_installed() {

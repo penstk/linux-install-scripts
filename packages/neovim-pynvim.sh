@@ -16,7 +16,7 @@ UBUNTU_PKG="python3-pynvim"
 FEDORA_PKG="python3-pynvim"
 
 # Load helper scripts
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 # Helper function to check if pynvim is installed
 _python_has_pynvim() {

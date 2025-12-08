@@ -14,7 +14,7 @@ FEDORA_PKG="$APP_NAME"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 append_line_if_missing() {
   local file="$1" line="$2"

@@ -7,7 +7,7 @@ CMD_NAME="$APP_NAME"
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
-. "$ROOT_DIR/helpers/install.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
   is_installed_cmd "$CMD_NAME"
