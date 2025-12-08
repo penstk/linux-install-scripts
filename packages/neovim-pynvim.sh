@@ -12,7 +12,7 @@ DEPENDENCIES=(
 # Set to "" if this package is not available on that distro.
 # Keep "$APP_NAME" when the package name matches APP_NAME.
 ARCH_PKG="python-pynvim"
-UBUNTU_PKG="python3-pynvim"
+UBUNTU_PKG="python3-neovim"
 FEDORA_PKG="python3-pynvim"
 
 # Load helper scripts
