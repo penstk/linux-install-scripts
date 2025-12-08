@@ -4,6 +4,13 @@ APP_NAME="snapd"
 # Command to check for in PATH.
 CMD_NAME="snap"
 
+# Package names in each distro's package manager.
+# Set to "" if this package is not available on that distro.
+# Keep "$APP_NAME" when the package name matches APP_NAME.
+ARCH_PKG="$APP_NAME"
+UBUNTU_PKG="$APP_NAME"
+FEDORA_PKG="$APP_NAME"
+
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
@@ -14,28 +21,12 @@ esac
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
+. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
   is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
-  case "$DISTRO" in
-  arch | cachyos)
-    paru -S --needed --noconfirm snapd
-    ;;
-
-  ubuntu)
-    sudo apt-get install -y snapd
-    ;;
-
-  fedora)
-    sudo dnf install -y snapd
-    ;;
-
-  *)
-    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
-    return 1
-    ;;
-  esac
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 }
