@@ -36,7 +36,7 @@ install_via_asdf() {
   asdf install "$app_name" "$version" || return 1
 
   # Set version as user-global (fall back to 'global' if 'set -u' isn't available)
-  if asdf help set >/dev/null 2>&1; then
+  if asdf set help >/dev/null 2>&1; then
     asdf set -u "$app_name" "$version" || return 1
   else
     asdf global "$app_name" "$version" || return 1
