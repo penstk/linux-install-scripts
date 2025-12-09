@@ -51,7 +51,7 @@ install_package() {
     fi
     ;;
   fedora)
-    sudo dnf copr enable dejan/lazygit
+    sudo dnf copr enable -y dejan/lazygit
     sudo dnf install -y lazygit
     ;;
   *)
