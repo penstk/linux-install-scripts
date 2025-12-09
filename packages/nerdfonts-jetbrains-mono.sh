@@ -25,7 +25,7 @@ is_installed() {
 }
 
 install_package() {
-  local tmpdir
+  local tmpdir rc
 
   case "$DISTRO" in
   arch | cachyos)
@@ -33,12 +33,15 @@ install_package() {
     ;;
   ubuntu | fedora)
     tmpdir="$(mktemp -d)" || return 1
-    trap 'rm -rf "$tmpdir"' RETURN
-
-    curl -fLo "$tmpdir/JetBrainsMono.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz || return 1
-    sudo mkdir -p /usr/local/share/fonts/nerd-fonts || return 1
-    sudo tar -xf "$tmpdir/JetBrainsMono.tar.xz" -C /usr/local/share/fonts/nerd-fonts || return 1
-    sudo fc-cache -f || return 1
+    (
+      curl -fLo "$tmpdir/JetBrainsMono.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz || exit 1
+      sudo mkdir -p /usr/local/share/fonts/nerd-fonts || exit 1
+      sudo tar -xf "$tmpdir/JetBrainsMono.tar.xz" -C /usr/local/share/fonts/nerd-fonts || exit 1
+      sudo fc-cache -f || exit 1
+    )
+    rc=$?
+    rm -rf "$tmpdir"
+    return "$rc"
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
