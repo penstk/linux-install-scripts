@@ -5,6 +5,13 @@ APP_NAME="appimagelauncher"
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="ail-cli"
 
+# Packages that should be installed before installing this package.
+# Each entry must correspond to another package script in the packages directory (without .sh).
+# shellcheck disable=SC2034 # used by install.sh dependency resolver
+DEPENDENCIES=(
+  curl
+)
+
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/github-helpers.sh"
