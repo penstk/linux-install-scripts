@@ -30,7 +30,7 @@ install_package() {
     ;;
 
   fedora)
-    sudo dnf copr enable varlad/zellij
+    sudo dnf copr enable -y varlad/zellij
     sudo dnf install -y zellij
     ;;
 
