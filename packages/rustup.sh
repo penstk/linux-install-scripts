@@ -56,6 +56,13 @@ configure_cargo_shells() {
   append_line_if_missing "$HOME/.profile" "$cargo_line"
 
   append_fish_cargo_block
+
+  # Make sure cargo are available in the current shell session, that runs the install.sh script
+  local cargo_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
+  case ":$PATH:" in
+  *":$cargo_dir:"*) ;;
+  *) export PATH="$cargo_dir:$PATH" ;;
+  esac
 }
 
 is_installed() {
