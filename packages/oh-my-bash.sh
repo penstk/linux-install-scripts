@@ -25,12 +25,12 @@ install_package() {
   local bash_profile="$HOME/.bash_profile"
 
   if [[ -f "$bash_profile" ]]; then
+    # If not already sourcing .bashrc
     if ! grep -Eq '(^|\s)(\.|source)\s+(\$HOME|~/)\.bashrc' "$bash_profile"; then
       {
         echo
-        echo 'if [[ -f ~/.bashrc ]]; then'
-        echo '  source ~/.bashrc'
-        echo 'fi'
+        # Source .bashrc
+        echo '[[ -f ~/.bashrc ]] && . ~/.bashrc'
       } >>"$bash_profile"
       echo "==> Updated ~/.bash_profile to source ~/.bashrc for oh-my-bash"
     fi
