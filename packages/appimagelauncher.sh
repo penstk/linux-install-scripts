@@ -5,12 +5,16 @@ APP_NAME="appimagelauncher"
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="ail-cli"
 
-# Packages that should be installed before installing this package.
-# Each entry must correspond to another package script in the packages directory (without .sh).
-# shellcheck disable=SC2034 # used by install.sh dependency resolver
-DEPENDENCIES=(
-  curl
-)
+# Distro-specific dependencies:
+DEPENDENCIES=()
+case "$DISTRO" in
+arch | cachyos)
+  DEPENDENCIES+=(paru)
+  ;;
+ubuntu | fedora)
+  DEPENDENCIES+=(curl)
+  ;;
+esac
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"

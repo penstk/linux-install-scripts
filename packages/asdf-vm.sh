@@ -7,8 +7,11 @@ CMD_NAME="asdf"
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
+arch | cachyos)
+  DEPENDENCIES+=(paru)
+  ;;
 ubuntu | fedora)
-  DEPENDENCIES+=(git)
+  DEPENDENCIES+=(curl)
   ;;
 esac
 

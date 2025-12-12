@@ -8,6 +8,16 @@ DEPENDENCIES=(
   docker
   freerdp
 )
+# Distro-specific dependencies:
+case "$DISTRO" in
+arch | cachyos)
+  DEPENDENCIES+=(paru)
+  ;;
+ubuntu | fedora)
+  DEPENDENCIES+=(curl)
+  ;;
+esac
+
 # Load helper scripts
 . "$ROOT_DIR/helpers/github-helpers.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
