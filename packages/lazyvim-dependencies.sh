@@ -3,9 +3,10 @@
 
 DEPENDENCIES=(
   neovim
-  python3
-  python3-pip
-  neovim-pynvim            # support for python plugins in Nvim
+  python3_asdf
+  # python3
+  # python3-pip
+  neovim-pynvim_pip        # support for python plugins in Nvim
   git                      # for partial clones support
   nerdfonts-jetbrains-mono # needed to display some icons
   lazygit

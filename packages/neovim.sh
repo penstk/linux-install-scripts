@@ -1,6 +1,3 @@
-# Application name (used in logs / messages)
-APP_NAME="neovim"
-
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="nvim"
@@ -15,7 +12,6 @@ DEPENDENCIES=(
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
-. "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
   # Check if all dependencies installed
@@ -40,7 +36,7 @@ install_package() {
     ;;
 
   *)
-    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
+    echo "Unsupported distro '$DISTRO'." >&2
     return 1
     ;;
   esac
