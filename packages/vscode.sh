@@ -22,7 +22,7 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --needed --noconfirm visual-studio-code-bin
+    paru -S --needed --noconfirm code
     ;;
 
   ubuntu)
