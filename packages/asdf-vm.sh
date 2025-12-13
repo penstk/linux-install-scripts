@@ -19,6 +19,7 @@ esac
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/github-helpers.sh"
 . "$ROOT_DIR/helpers/bin-helpers.sh"
+. "$ROOT_DIR/helpers/shell-helpers.sh"
 
 # Check if already installed
 is_installed() {
@@ -70,18 +71,6 @@ install_asdf_from_github() {
   install_binary_from_url "$url" "asdf" "/usr/local/bin"
 }
 
-append_line_if_missing() {
-  local file="$1" line="$2"
-
-  mkdir -p "$(dirname "$file")"
-  [[ -f "$file" ]] || touch "$file"
-
-  # Add the line only if it is not already present verbatim
-  if ! grep -qxF "$line" "$file" 2>/dev/null; then
-    printf '%s\n' "$line" >>"$file"
-  fi
-}
-
 append_fish_asdf_block() {
   local file="$HOME/.config/fish/config.fish"
   local marker="# ASDF configuration code"
@@ -98,16 +87,9 @@ end
 if not contains $_asdf_shims $PATH
     set -gx --prepend PATH $_asdf_shims
 end
-set --erase _asdf_shims
+	set --erase _asdf_shims
 '
-
-  mkdir -p "$(dirname "$file")"
-  [[ -f "$file" ]] || touch "$file"
-
-  # Only append once, using the marker as an anchor
-  if ! grep -q "$marker" "$file" 2>/dev/null; then
-    printf '%s\n' "$block" >>"$file"
-  fi
+  append_block_if_missing "$file" "$marker" "$block"
 }
 
 configure_asdf_shells() {

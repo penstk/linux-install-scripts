@@ -15,18 +15,7 @@ FEDORA_PKG="$APP_NAME"
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
-
-append_line_if_missing() {
-  local file="$1" line="$2"
-
-  mkdir -p "$(dirname "$file")"
-  [[ -f "$file" ]] || touch "$file"
-
-  # Add the line only if it is not already present verbatim
-  if ! grep -qxF "$line" "$file" 2>/dev/null; then
-    printf '%s\n' "$line" >>"$file"
-  fi
-}
+. "$ROOT_DIR/helpers/shell-helpers.sh"
 
 append_fish_config() {
   local file="$HOME/.config/fish/config.fish"
@@ -35,14 +24,7 @@ append_fish_config() {
 # Zoxide configuration code
 zoxide init fish | source
 '
-
-  mkdir -p "$(dirname "$file")"
-  [[ -f "$file" ]] || touch "$file"
-
-  # Only append once, using the marker as an anchor
-  if ! grep -q "$marker" "$file" 2>/dev/null; then
-    printf '%s\n' "$block" >>"$file"
-  fi
+  append_block_if_missing "$file" "$marker" "$block"
 }
 
 configure_shells() {
