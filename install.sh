@@ -368,7 +368,7 @@ install_and_print_summary() {
 
   echo
   echo "=================================================================================================================="
-  echo "      Install complete! Please start a fresh shell session so new tools and configs are picked up correctly."
+  echo "       Install complete! Please logout and login again so new tools and configs are picked up correctly."
   echo "=================================================================================================================="
 }
 
