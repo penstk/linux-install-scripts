@@ -79,7 +79,7 @@ install_package() {
     rustup default stable
     ;;
   fedora)
-    rustup-init -y
+    rustup-init -y --no-modify-path
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
