@@ -26,12 +26,12 @@ install_package() {
 
   ubuntu)
     sudo apt-get install -y libssl-dev libasound2-dev libdbus-1-dev
-    cargo binstall spotify_player --no-confirm --disable-telemetry --locked
+    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
     ;;
 
   fedora)
     sudo dnf install -y openssl-devel alsa-lib-devel dbus-devel
-    cargo binstall spotify_player --no-confirm --disable-telemetry --locked
+    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
     ;;
   *)
     echo "Unsupported distro '$DISTRO'." >&2
