@@ -13,13 +13,6 @@ DEPENDENCIES=(
   neovim-npm_npm
 )
 
-# Package names in each distro's package manager.
-# Set to "" if this package is not available on that distro.
-# Keep "$APP_NAME" when the package name matches APP_NAME.
-ARCH_PKG="$APP_NAME"
-UBUNTU_PKG="$APP_NAME"
-FEDORA_PKG="$APP_NAME"
-
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
@@ -33,5 +26,22 @@ is_installed() {
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  case "$DISTRO" in
+  arch | cachyos)
+    sudo pacman -S --needed --noconfirm neovim
+    ;;
+
+  ubuntu)
+    sudo snap install nvim --classic
+    ;;
+
+  fedora)
+    sudo dnf install -y neovim
+    ;;
+
+  *)
+    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
+    return 1
+    ;;
+  esac
 }
