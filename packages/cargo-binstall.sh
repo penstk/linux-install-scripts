@@ -2,6 +2,7 @@
 # Each entry must correspond to another package script in the packages directory (without .sh).
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
+  rustup
   curl
 )
 
