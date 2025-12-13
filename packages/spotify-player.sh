@@ -37,12 +37,12 @@ install_package() {
 
   ubuntu)
     sudo apt-get install -y libssl-dev libasound2-dev libdbus-1-dev
-    cargo install spotify_player --locked
+    cargo binstall spotify_player --locked
     ;;
 
   fedora)
     sudo dnf install -y openssl-devel alsa-lib-devel dbus-devel
-    cargo install spotify_player --locked
+    cargo binstall spotify_player --locked
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
