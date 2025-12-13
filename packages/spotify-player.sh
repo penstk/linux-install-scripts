@@ -7,6 +7,7 @@ DEPENDENCIES=()
 case "$DISTRO" in
 ubuntu | fedora)
   DEPENDENCIES+=(rustup)
+  DEPENDENCIES+=(cargo-binstall)
   ;;
 esac
 
