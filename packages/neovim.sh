@@ -6,7 +6,7 @@ CMD_NAME="nvim"
 # Each entry must correspond to another package script in the packages directory (without .sh).
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
-  neovim-pynvim
+  neovim-pynvim_pip
   neovim-npm_npm
 )
 
