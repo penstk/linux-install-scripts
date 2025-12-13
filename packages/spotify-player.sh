@@ -1,6 +1,3 @@
-# Application name (used in logs / messages)
-APP_NAME="spotify-player"
-
 # Command to check for in PATH.
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="spotify_player"
@@ -13,13 +10,6 @@ ubuntu | fedora)
   ;;
 esac
 
-# Package names in each distro's package manager.
-# Set to "" if this package is not available on that distro.
-# Keep "$APP_NAME" when the package name matches APP_NAME.
-ARCH_PKG="$APP_NAME"
-UBUNTU_PKG=""
-FEDORA_PKG=""
-
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
@@ -29,7 +19,6 @@ is_installed() {
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
   case "$DISTRO" in
   arch | cachyos)
     sudo pacman -S --needed --noconfirm spotify-player
@@ -37,15 +26,15 @@ install_package() {
 
   ubuntu)
     sudo apt-get install -y libssl-dev libasound2-dev libdbus-1-dev
-    cargo binstall spotify_player --locked
+    cargo binstall spotify_player --no-confirm --disable-telemetry --locked
     ;;
 
   fedora)
     sudo dnf install -y openssl-devel alsa-lib-devel dbus-devel
-    cargo binstall spotify_player --locked
+    cargo binstall spotify_player --no-confirm --disable-telemetry --locked
     ;;
   *)
-    echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
+    echo "Unsupported distro '$DISTRO'." >&2
     return 1
     ;;
   esac
