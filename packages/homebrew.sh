@@ -53,36 +53,8 @@ configure_brew_shells() {
 }
 
 install_package() {
-  local had_keepalive=0
-  local installer_rc=0
-
-  # If install.sh keepalive is running, stop it before running Homebrew.
-  if declare -F stop_sudo_keepalive >/dev/null 2>&1; then
-    if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
-      had_keepalive=1
-      echo "==> Stopping sudo keepalive before Homebrew installer..."
-      stop_sudo_keepalive
-    fi
-  fi
-
-  # Ensure we have sudo cached before running the installer (important with NONINTERACTIVE=1).
-  sudo -v
-
-  # Run the official installer unmodified
+  # Install homebrew
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  installer_rc=$?
-
-  # Homebrew may invalidate sudo at exit (sudo -k). Re-establish sudo + keepalive for the rest of the run.
-  if ((had_keepalive)); then
-    echo "==> Re-establishing sudo session after Homebrew installer..."
-    sudo -v
-    start_sudo_keepalive
-  fi
-
-  # If installer failed, propagate failure (install.sh will record it and continue to next packages).
-  if ((installer_rc != 0)); then
-    return "$installer_rc"
-  fi
 
   # Configure PATH/env settings
   configure_brew_shells
