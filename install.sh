@@ -10,6 +10,36 @@ PKG_DIR="$SCRIPT_DIR/packages"
 
 PKG_CONF=""
 
+# --- Sudo keepalive ----------------------------------------------------
+SUDO_KEEPALIVE_PID=""
+SUDO_KEEPALIVE_INTERVAL="${SUDO_KEEPALIVE_INTERVAL:-10}" # seconds
+
+start_sudo_keepalive() {
+  echo "==> Asking for sudo once..."
+  sudo -v
+
+  local main_pid="$$"
+  local interval="$SUDO_KEEPALIVE_INTERVAL"
+
+  (
+    # Keep the timestamp fresh until the main script exits or sudo stops cooperating.
+    while true; do
+      sleep "$interval" || exit 0
+
+      # Exit if the parent script is gone (avoids orphaned keepalive).
+      kill -0 "$main_pid" 2>/dev/null || exit 0
+
+      # Refresh sudo timestamp without prompting. If it fails once, stop and warn.
+      if ! sudo -n -v 2>/dev/null; then
+        echo "WARN: sudo keepalive stopped (sudo timestamp no longer valid or policy prevents refresh). You may be prompted again." >&2
+        exit 0
+      fi
+    done
+  ) &
+
+  SUDO_KEEPALIVE_PID="$!"
+}
+
 # --- Detect distro ----------------------------------------------------
 detect_distro() {
   if [[ "$(uname -s)" != "Linux" ]]; then
@@ -60,17 +90,8 @@ prepare_system() {
   echo "==> Detected distro: $DISTRO"
 
   # --- Authenticate once with sudo and keepalive ------------------------------
-  echo "==> Asking for sudo once..."
-  sudo -v
-
-  (
-    while true; do
-      sudo -n true 2>/dev/null || exit 0
-      sleep 30
-    done
-  ) &
-  SUDO_KEEPALIVE_PID=$!
-  trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+  start_sudo_keepalive
+  trap 'stop_sudo_keepalive' EXIT INT TERM
 
   # --- Update all packages before installing ----------------------------------
   echo "==> Updating system..."
