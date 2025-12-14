@@ -14,7 +14,11 @@ is_installed() {
 }
 
 install_package() {
+  is_installed_cmd "brew" || return 1
+
   # Run `brew` in a pseudo-TTY to avoid Homebrew invalidating the sudo timestamp
   # (e.g. via `sudo -k`) and disrupting the installer’s sudo keepalive.
-  run_in_pty brew install jesseduffield/lazydocker/lazydocker
+  run_in_pty brew install jesseduffield/lazydocker/lazydocker || return 1
+
+  return 0 ## installation successful
 }

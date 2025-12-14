@@ -54,8 +54,13 @@ configure_brew_shells() {
 
 install_package() {
   # Install homebrew
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || return 1
 
   # Configure PATH/env settings
-  configure_brew_shells
+  configure_brew_shells || return 1
+
+  # Final sanity check: brew must be usable now
+  command -v brew >/dev/null 2>&1 || return 1
+
+  return 0
 }
