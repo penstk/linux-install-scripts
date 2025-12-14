@@ -8,7 +8,6 @@ DEPENDENCIES=(
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/shell-helpers.sh"
-. "$ROOT_DIR/helpers/run_in_pty.sh"
 
 is_installed() {
   is_installed_cmd "brew"
@@ -54,18 +53,8 @@ configure_brew_shells() {
 }
 
 install_package() {
-  local url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-  local tmp
-
-  tmp="$(mktemp -t homebrew-install.XXXXXX)"
-  curl -fsSL "$url" -o "$tmp"
-  chmod +x "$tmp"
-
-  # Run installer in a pseudo-TTY to avoid the Homebrew installer invalidating the sudo timestamp
-  # (e.g. via `sudo -k`) and disrupting the installer’s sudo keepalive.
-  run_in_pty env NONINTERACTIVE=1 /bin/bash "$tmp"
-
-  rm -f "$tmp"
+  # Install homebrew
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   # Configure PATH/env settings
   configure_brew_shells
