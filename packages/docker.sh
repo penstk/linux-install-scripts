@@ -15,8 +15,8 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --noconfirm --needed docker docker-compose
-    sudo systemctl enable --now docker.service
+    sudo pacman -S --noconfirm --needed docker docker-compose || return 1
+    sudo systemctl enable --now docker.service || return 1
     ;;
   ubuntu)
     # Uninstall any conflicting package
@@ -29,11 +29,11 @@ install_package() {
 
     # Set up Docker's apt repository.
     # Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt -y install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    sudo apt-get update || return 1
+    sudo apt -y install ca-certificates curl || return 1
+    sudo install -m 0755 -d /etc/apt/keyrings || return 1
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc || return 1
+    sudo chmod a+r /etc/apt/keyrings/docker.asc || return 1
 
     # Add the repository to Apt sources:
     sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
@@ -47,7 +47,7 @@ EOF
     sudo apt-get update
 
     # Install the Docker packages.
-    sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || return 1
     ;;
   fedora)
     # Uinstall any conflicting package
@@ -62,13 +62,13 @@ EOF
       docker-engine-selinux \
       docker-engine
     # Set up the repository
-    sudo dnf -y install dnf-plugins-core
-    sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    sudo dnf -y install dnf-plugins-core || return 1
+    sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || return 1
 
     # Install the Docker packages.
-    sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || return 1
     # Start Docker Engine.
-    sudo systemctl enable --now docker
+    sudo systemctl enable --now docker || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
@@ -77,11 +77,11 @@ EOF
   esac
 
   # Create the docker group.
-  sudo groupadd -f docker
+  sudo groupadd -f docker || return 1
   # Add the current user to the docker group.
-  sudo usermod -aG docker "$USER"
+  sudo usermod -aG docker "$USER" || return 1
   # Ensure ~/.docker exists and has correct ownership & permissions
-  mkdir -p "$HOME/.docker"
-  sudo chown -R "$USER":"$USER" "$HOME"/.docker
-  sudo chmod -R g+rwx "$HOME/.docker"
+  mkdir -p "$HOME/.docker" || return 1
+  sudo chown -R "$USER":"$USER" "$HOME"/.docker || return 1
+  sudo chmod -R g+rwx "$HOME/.docker" || return 1
 }

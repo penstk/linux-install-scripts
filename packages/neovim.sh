@@ -13,15 +13,15 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm neovim
+    sudo pacman -S --needed --noconfirm neovim || return 1
     ;;
 
   ubuntu)
-    sudo snap install nvim --classic
+    sudo snap install nvim --classic || return 1
     ;;
 
   fedora)
-    sudo dnf install -y neovim
+    sudo dnf install -y neovim || return 1
     ;;
 
   *)

@@ -41,7 +41,7 @@ is_installed() {
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
-  configure_shells
-  eval "$(zoxide init bash)"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" || return 1
+  configure_shells || return 1
+  eval "$(zoxide init bash)" || return 1
 }

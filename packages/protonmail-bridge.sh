@@ -64,15 +64,15 @@ install_package() {
   case "$DISTRO" in
   arch | cachyos)
     # Official Arch package
-    sudo pacman -S --needed --noconfirm protonmail-bridge
+    sudo pacman -S --needed --noconfirm protonmail-bridge || return 1
     ;;
 
   ubuntu)
-    install_from_proton DebFile
+    install_from_proton DebFile || return 1
     ;;
 
   fedora)
-    install_from_proton RpmFile
+    install_from_proton RpmFile || return 1
     ;;
 
   *)

@@ -16,7 +16,7 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm lazygit
+    sudo pacman -S --needed --noconfirm lazygit || return 1
     ;;
   ubuntu)
     # Check Ubuntu Version
@@ -30,7 +30,7 @@ install_package() {
 
     if ((major > 25 || (major == 25 && minor >= 10))); then
       # Ubuntu 25.10+ → lazygit is in the repo
-      sudo apt-get install -y lazygit
+      sudo apt-get install -y lazygit || return 1
     else
       # Ubuntu 25.04 and earlier → install from GitHub
       tmpdir="$(mktemp -d)"
@@ -43,7 +43,7 @@ install_package() {
         curl -Lo lazygit.tar.gz \
           "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
         tar xf lazygit.tar.gz lazygit
-        sudo install lazygit -D -t /usr/local/bin/
+        sudo install lazygit -D -t /usr/local/bin/ || return 1
       )
       rc=$? # Save exit code of the subshell
       rm -rf "$tmpdir"
@@ -51,8 +51,8 @@ install_package() {
     fi
     ;;
   fedora)
-    sudo dnf copr enable -y dejan/lazygit
-    sudo dnf install -y lazygit
+    sudo dnf copr enable -y dejan/lazygit || return 1
+    sudo dnf install -y lazygit || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

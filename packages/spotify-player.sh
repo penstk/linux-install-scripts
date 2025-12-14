@@ -21,17 +21,17 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm spotify-player
+    sudo pacman -S --needed --noconfirm spotify-player || return 1
     ;;
 
   ubuntu)
-    sudo apt-get install -y libssl-dev libasound2-dev libdbus-1-dev
-    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
+    sudo apt-get install -y libssl-dev libasound2-dev libdbus-1-dev || return 1
+    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }" || return 1
     ;;
 
   fedora)
-    sudo dnf install -y openssl-devel alsa-lib-devel dbus-devel
-    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
+    sudo dnf install -y openssl-devel alsa-lib-devel dbus-devel || return 1
+    cargo binstall spotify_player --no-confirm --disable-telemetry --pkg-url="{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }" || return 1
     ;;
   *)
     echo "Unsupported distro '$DISTRO'." >&2

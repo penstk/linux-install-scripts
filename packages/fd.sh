@@ -21,7 +21,7 @@ is_installed() {
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" || return 1
   case "$DISTRO" in
   ubuntu)
     # Global symlink so users can use fd with "fd" instead of "fdfind"

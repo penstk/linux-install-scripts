@@ -18,5 +18,5 @@ is_installed() {
 }
 
 install_package() {
-  cargo binstall cargo-update --no-confirm --disable-telemetry
+  cargo binstall cargo-update --no-confirm --disable-telemetry || return 1
 }

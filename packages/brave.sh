@@ -41,20 +41,20 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --needed --noconfirm brave-bin
+    paru -S --needed --noconfirm brave-bin || return 1
     ;;
 
   ubuntu)
-    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-    sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
-    sudo apt-get update
-    sudo apt-get install -y brave-browser
+    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg || return 1
+    sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources || return 1
+    sudo apt-get update || return 1
+    sudo apt-get install -y brave-browser || return 1
     ;;
 
   fedora)
-    sudo dnf install -y dnf-plugins-core
-    sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-    sudo dnf install -y brave-browser
+    sudo dnf install -y dnf-plugins-core || return 1
+    sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo || return 1
+    sudo dnf install -y brave-browser || return 1
     ;;
 
   *)

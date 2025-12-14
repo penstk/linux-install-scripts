@@ -32,13 +32,13 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --noconfirm --needed ferdium-bin
+    paru -S --noconfirm --needed ferdium-bin || return 1
     ;;
   ubuntu)
-    sudo snap install ferdium
+    sudo snap install ferdium || return 1
     ;;
   fedora)
-    sudo flatpak install -y flathub org.ferdium.Ferdium
+    sudo flatpak install -y flathub org.ferdium.Ferdium || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

@@ -40,17 +40,17 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm yazi resvg
+    sudo pacman -S --needed --noconfirm yazi resvg || return 1
     ;;
 
   ubuntu)
-    sudo apt-get install -y resvg
-    sudo snap install yazi --classic
+    sudo apt-get install -y resvg || return 1
+    sudo snap install yazi --classic || return 1
     ;;
 
   fedora)
-    sudo dnf copr enable -y lihaohong/yazi
-    sudo dnf install -y yazi
+    sudo dnf copr enable -y lihaohong/yazi || return 1
+    sudo dnf install -y yazi || return 1
     ;;
 
   *)

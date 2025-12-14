@@ -22,16 +22,16 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm zellij
+    sudo pacman -S --needed --noconfirm zellij || return 1
     ;;
 
   ubuntu)
-    sudo snap install zellij --classic
+    sudo snap install zellij --classic || return 1
     ;;
 
   fedora)
-    sudo dnf copr enable -y varlad/zellij
-    sudo dnf install -y zellij
+    sudo dnf copr enable -y varlad/zellij || return 1
+    sudo dnf install -y zellij || return 1
     ;;
 
   *)

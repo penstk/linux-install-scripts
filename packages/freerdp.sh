@@ -18,13 +18,13 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm "freerdp"
+    sudo pacman -S --needed --noconfirm "freerdp" || return 1
     ;;
   ubuntu)
-    sudo apt-get install -y "freerdp3-x11" "freerdp3-wayland"
+    sudo apt-get install -y "freerdp3-x11" "freerdp3-wayland" || return 1
     ;;
   fedora)
-    sudo dnf install -y "freerdp"
+    sudo dnf install -y "freerdp" || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

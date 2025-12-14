@@ -75,15 +75,15 @@ install_from_github_pkg() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --needed --noconfirm appimagelauncher
+    paru -S --needed --noconfirm appimagelauncher || return 1
     ;;
 
   ubuntu)
-    install_from_github_pkg deb
+    install_from_github_pkg deb || return 1
     ;;
 
   fedora)
-    install_from_github_pkg rpm
+    install_from_github_pkg rpm || return 1
     ;;
 
   *)

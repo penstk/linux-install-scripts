@@ -58,8 +58,8 @@ install_package() {
   mkdir -p "$xdg_config_home"
 
   # Clone the starter
-  git clone https://github.com/LazyVim/starter "$xdg_config_home/nvim"
+  git clone https://github.com/LazyVim/starter "$xdg_config_home/nvim" || return 1
 
   # Remove the .git folder, so you can add it to your own repo later
-  rm -rf "$xdg_config_home/nvim/.git"
+  rm -rf "$xdg_config_home/nvim/.git" || return 1
 }

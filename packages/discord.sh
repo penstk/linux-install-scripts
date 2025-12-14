@@ -41,15 +41,15 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm discord
+    sudo pacman -S --needed --noconfirm discord || return 1
     ;;
   ubuntu)
-    sudo snap install discord
+    sudo snap install discord || return 1
     ;;
 
   fedora)
-    sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-    sudo dnf install -y discord
+    sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" || return 1
+    sudo dnf install -y discord || return 1
     ;;
 
   *)

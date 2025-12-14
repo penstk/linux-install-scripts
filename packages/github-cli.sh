@@ -22,7 +22,7 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm github-cli
+    sudo pacman -S --needed --noconfirm github-cli || return 1
     ;;
   ubuntu)
     # Only run apt-get update if it hasn’t been done in this session
@@ -39,12 +39,12 @@ install_package() {
       sudo mkdir -p -m 755 /etc/apt/sources.list.d &&
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
       sudo apt-get update &&
-      sudo apt-get install gh -y
+      sudo apt-get install gh -y || return 1
     ;;
   fedora)
-    sudo dnf install dnf5-plugins -y
-    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
-    sudo dnf install gh --repo gh-cli -y
+    sudo dnf install dnf5-plugins -y || return 1
+    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo || return 1
+    sudo dnf install gh --repo gh-cli -y || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

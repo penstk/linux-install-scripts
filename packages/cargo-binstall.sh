@@ -15,4 +15,7 @@ is_installed() {
 
 install_package() {
   curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+  # ensure it is actually available now
+  is_installed_cmd "cargo-binstall" || return 1
 }

@@ -136,11 +136,11 @@ configure_asdf_completions() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --needed --noconfirm asdf-vm
+    paru -S --needed --noconfirm asdf-vm || return 1
     ;;
 
   ubuntu | fedora)
-    install_asdf_from_github
+    install_asdf_from_github || return 1
     ;;
 
   *)
@@ -149,6 +149,6 @@ install_package() {
     ;;
   esac
 
-  configure_asdf_shells
-  configure_asdf_completions
+  configure_asdf_shells || return 1
+  configure_asdf_completions || return 1
 }

@@ -15,13 +15,13 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm "7zip"
+    sudo pacman -S --needed --noconfirm "7zip" || return 1
     ;;
   ubuntu)
-    sudo apt-get install -y "p7zip-full"
+    sudo apt-get install -y "p7zip-full" || return 1
     ;;
   fedora)
-    sudo dnf install -y "p7zip" "p7zip-plugins"
+    sudo dnf install -y "p7zip" "p7zip-plugins" || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2

@@ -13,5 +13,5 @@ is_installed() {
 }
 
 install_package() {
-  uv tool install --upgrade pynvim
+  uv tool install --upgrade pynvim || return 1
 }

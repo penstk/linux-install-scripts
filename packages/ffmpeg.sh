@@ -15,17 +15,17 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm ffmpeg
+    sudo pacman -S --needed --noconfirm ffmpeg || return 1
     ;;
 
   ubuntu)
-    sudo apt-get install -y ffmpeg
+    sudo apt-get install -y ffmpeg || return 1
     ;;
 
   fedora)
-    sudo dnf install -y "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-    sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-    sudo dnf install -y ffmpeg --allowerasing
+    sudo dnf install -y "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" || return 1
+    sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" || return 1
+    sudo dnf install -y ffmpeg --allowerasing || return 1
     ;;
 
   *)

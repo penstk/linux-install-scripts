@@ -18,22 +18,22 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm flatpak
-    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    sudo flatpak remote-modify --system --enable flathub
+    sudo pacman -S --needed --noconfirm flatpak || return 1
+    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || return 1
+    sudo flatpak remote-modify --system --enable flathub || return 1
     ;;
 
   ubuntu)
-    sudo apt-get install -y flatpak
-    sudo apt-get install -y gnome-software-plugin-flatpak
-    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    sudo flatpak remote-modify --system --enable flathub
+    sudo apt-get install -y flatpak || return 1
+    sudo apt-get install -y gnome-software-plugin-flatpak || return 1
+    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || return 1
+    sudo flatpak remote-modify --system --enable flathub || return 1
     ;;
 
   fedora)
-    sudo dnf install -y flatpak
-    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    sudo flatpak remote-modify --system --enable flathub
+    sudo dnf install -y flatpak || return 1
+    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || return 1
+    sudo flatpak remote-modify --system --enable flathub || return 1
     ;;
 
   *)

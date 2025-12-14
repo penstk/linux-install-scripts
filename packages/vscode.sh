@@ -22,18 +22,18 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    paru -S --needed --noconfirm code
+    paru -S --needed --noconfirm code || return 1
     ;;
 
   ubuntu)
-    sudo snap install --classic code
+    sudo snap install --classic code || return 1
     ;;
 
   fedora)
-    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc || return 1
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo >/dev/null
-    dnf check-update
-    sudo dnf install -y code
+    dnf check-update || return 1
+    sudo dnf install -y code || return 1
     ;;
 
   *)

@@ -32,15 +32,15 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo pacman -S --needed --noconfirm bitwarden
+    sudo pacman -S --needed --noconfirm bitwarden || return 1
     ;;
 
   ubuntu)
-    sudo snap install bitwarden
-    sudo snap connect bitwarden:password-manager-service
+    sudo snap install bitwarden || return 1
+    sudo snap connect bitwarden:password-manager-service || return 1
     ;;
   fedora)
-    sudo flatpak install -y flathub com.bitwarden.desktop
+    sudo flatpak install -y flathub com.bitwarden.desktop || return 1
     ;;
   *)
     echo "$APP_NAME: Unsupported distro '$DISTRO'." >&2
