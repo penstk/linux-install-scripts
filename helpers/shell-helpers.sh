@@ -14,7 +14,11 @@ append_line_if_missing() {
 
   ensure_file_exists "$file"
 
-  if ! grep -qxF "$line" "$file" 2>/dev/null; then
+  if ! grep -qxF -- "$line" "$file" 2>/dev/null; then
+    # If file is non-empty and doesn't end with a newline, add one first
+    if [[ -s "$file" ]] && [[ "$(tail -c 1 "$file" 2>/dev/null)" != $'\n' ]]; then
+      printf '\n' >>"$file"
+    fi
     printf '%s\n' "$line" >>"$file"
   fi
 }
