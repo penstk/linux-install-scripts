@@ -11,11 +11,14 @@ DEPENDENCIES=(
 
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
+. "$ROOT_DIR/helpers/run_in_pty.sh"
 
 is_installed() {
   is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
-  brew install codex
+  # Run `brew` in a pseudo-TTY to avoid Homebrew invalidating the sudo timestamp
+  # (e.g. via `sudo -k`) and disrupting the installer’s sudo keepalive.
+  run_in_pty brew install codex
 }
