@@ -6,9 +6,6 @@ CMD_NAME="nvim"
 . "$ROOT_DIR/helpers/is_installed.sh"
 
 is_installed() {
-  # Check if all dependencies installed
-  is_installed_deps "${DEPENDENCIES[@]}" || return 1
-
   # Check if neovim is installed
   is_installed_cmd "$CMD_NAME" || return 1
 }
