@@ -10,6 +10,26 @@ PKG_DIR="$SCRIPT_DIR/packages"
 
 PKG_CONF=""
 
+# --- Logging -----------------------------------------------------------
+LOG_FILE="${LOG_FILE:-$SCRIPT_DIR/install.log}"
+
+init_logging() {
+  # Overwrite log on each run
+  : >"$LOG_FILE" || {
+    echo "ERROR: Cannot write log file: $LOG_FILE" >&2
+    exit 1
+  }
+
+  # Mirror all output to screen + log (stdout and stderr)
+  if command -v stdbuf >/dev/null 2>&1; then
+    exec > >(stdbuf -oL -eL tee "$LOG_FILE") 2>&1
+  else
+    exec > >(tee "$LOG_FILE") 2>&1
+  fi
+
+  echo "==> Logging to: $LOG_FILE"
+}
+
 # --- Sudo keepalive ----------------------------------------------------
 SUDO_KEEPALIVE_PID=""
 SUDO_KEEPALIVE_INTERVAL="${SUDO_KEEPALIVE_INTERVAL:-10}" # seconds
@@ -394,6 +414,8 @@ install_and_print_summary() {
 }
 
 main() {
+  init_logging
+
   parse_args "$@"
 
   # Resolve final package list (from file or CLI)
