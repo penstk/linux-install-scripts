@@ -3,10 +3,8 @@
 
 DEPENDENCIES=(
   neovim
-  python3_asdf
-  # python3
-  # python3-pip
-  neovim-pynvim_pip        # support for python plugins in Nvim
+  python3
+  neovim-pynvim            # support for python plugins in Nvim
   git                      # for partial clones support
   nerdfonts-jetbrains-mono # needed to display some icons
   lazygit
@@ -16,8 +14,7 @@ DEPENDENCIES=(
   fzf     # for fzf-lua
   ripgrep # for fzf-lua
   fd      # for fzf-lua
-  nodejs_asdf
-  unzip # for mason.nvim
+  unzip   # for mason.nvim
 )
 
 # Load helper scripts

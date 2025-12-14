@@ -2,14 +2,6 @@
 # Use a different value if the binary name differs from APP_NAME.
 CMD_NAME="nvim"
 
-# Packages that should be installed before installing this package.
-# Each entry must correspond to another package script in the packages directory (without .sh).
-# shellcheck disable=SC2034 # used by install.sh dependency resolver
-DEPENDENCIES=(
-  neovim-pynvim_pip
-  neovim-npm_npm
-)
-
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 
