@@ -29,13 +29,8 @@ install_via_aur() {
 
     cd "$app_name" || return 1
 
-    if ! makepkg --noconfirm; then
+    if ! makepkg -si --noconfirm --needed; then
       echo "Error: makepkg failed for $app_name" >&2
-      return 1
-    fi
-
-    if ! sudo pacman -U --noconfirm "${app_name}"-*.pkg.tar.zst; then
-      echo "Error: pacman -U failed for $app_name" >&2
       return 1
     fi
 
