@@ -10,6 +10,7 @@ CMD_NAME="$APP_NAME"
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
   git
+  rustup
 )
 
 # AUR repostitory with the sourcecode to built
