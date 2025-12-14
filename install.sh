@@ -10,6 +10,9 @@ PKG_DIR="$SCRIPT_DIR/packages"
 
 PKG_CONF=""
 
+# Avoid brew auto-update during this provisioning run
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 # --- Logging -----------------------------------------------------------
 LOG_FILE="${LOG_FILE:-$SCRIPT_DIR/install.log}"
 
