@@ -68,6 +68,27 @@ stop_sudo_keepalive() {
   fi
 }
 
+ensure_sudo_keepalive() {
+  # If keepalive PID is set but dead, clear it.
+  if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]] && ! kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    SUDO_KEEPALIVE_PID=""
+  fi
+
+  # If keepalive is running and sudo timestamp is still valid, nothing to do.
+  if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]]; then
+    if sudo -n -v 2>/dev/null; then
+      return 0
+    fi
+
+    # Keepalive is running but sudo auth was invalidated (e.g. sudo -k). Restart cleanly.
+    echo "==> sudo timestamp was invalidated; restarting sudo keepalive..."
+    stop_sudo_keepalive
+  fi
+
+  # No keepalive running (or it was stopped). Start it again.
+  start_sudo_keepalive
+}
+
 # --- Print runtime -----------------------------------------------------
 print_total_runtime() {
   local total="${SECONDS:-0}"
@@ -382,6 +403,8 @@ install_and_print_summary() {
   local pkg status
 
   for pkg in "$@"; do
+    ensure_sudo_keepalive
+
     if process_package "$pkg"; then
       status=0
     else
