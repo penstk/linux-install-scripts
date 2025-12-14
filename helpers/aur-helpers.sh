@@ -12,10 +12,8 @@ install_via_aur() {
 
   case "$DISTRO" in
   arch | cachyos)
-    if ! pacman -T "$(pacman -Sgq base-devel)" >/dev/null 2>&1; then
-      echo "==> Installing base-devel (required for AUR builds)..."
-      sudo pacman -S --needed --noconfirm base-devel
-    fi
+    echo "==> Ensure base-devel is installed..."
+    sudo pacman -S --needed --noconfirm base-devel
 
     TMPDIR="$(mktemp -d -t "${app_name}-build-XXXXXXXXXX")"
     echo "Using temp dir: $TMPDIR"
