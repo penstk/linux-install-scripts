@@ -35,7 +35,7 @@ SUDO_KEEPALIVE_PID=""
 SUDO_KEEPALIVE_INTERVAL="${SUDO_KEEPALIVE_INTERVAL:-10}" # seconds
 
 start_sudo_keepalive() {
-  echo "==> Asking for sudo once..."
+  echo "==> Validating sudo privileges..."
   sudo -v
 
   local main_pid="$$"
