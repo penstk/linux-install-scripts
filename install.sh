@@ -60,6 +60,14 @@ start_sudo_keepalive() {
   SUDO_KEEPALIVE_PID="$!"
 }
 
+stop_sudo_keepalive() {
+  if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]]; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    SUDO_KEEPALIVE_PID=""
+  fi
+}
+
 # --- Detect distro ----------------------------------------------------
 detect_distro() {
   if [[ "$(uname -s)" != "Linux" ]]; then
