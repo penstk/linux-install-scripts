@@ -66,7 +66,7 @@ prepare_system() {
   (
     while true; do
       sudo -n true 2>/dev/null || exit 0
-      sleep 60
+      sleep 30
     done
   ) &
   SUDO_KEEPALIVE_PID=$!
