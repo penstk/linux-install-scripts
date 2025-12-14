@@ -68,6 +68,17 @@ stop_sudo_keepalive() {
   fi
 }
 
+# --- Print runtime -----------------------------------------------------
+print_total_runtime() {
+  local total="${SECONDS:-0}"
+  local h=$((total / 3600))
+  local m=$(((total % 3600) / 60))
+  local s=$((total % 60))
+
+  echo
+  printf '==> Total runtime: %02d:%02d:%02d (hh:mm:ss)\n' "$h" "$m" "$s"
+}
+
 # --- Detect distro ----------------------------------------------------
 detect_distro() {
   if [[ "$(uname -s)" != "Linux" ]]; then
@@ -119,7 +130,6 @@ prepare_system() {
 
   # --- Authenticate once with sudo and keepalive ------------------------------
   start_sudo_keepalive
-  trap 'stop_sudo_keepalive' EXIT INT TERM
 
   # --- Update all packages before installing ----------------------------------
   echo "==> Updating system..."
@@ -414,15 +424,12 @@ install_and_print_summary() {
       echo "  - $p"
     done
   fi
-
-  echo
-  echo "=================================================================================================================="
-  echo "       Install complete! Please logout and login again so new tools and configs are picked up correctly."
-  echo "=================================================================================================================="
 }
 
 main() {
   init_logging
+
+  SECONDS=0
 
   parse_args "$@"
 
@@ -437,6 +444,15 @@ main() {
 
   # Install and print summary
   install_and_print_summary "${INSTALL_ORDER[@]}"
+
+  stop_sudo_keepalive
+
+  print_total_runtime
+
+  echo
+  echo "=================================================================================================================="
+  echo "       Install complete! Please logout and login again so new tools and configs are picked up correctly."
+  echo "=================================================================================================================="
 
   exit 0
 }
