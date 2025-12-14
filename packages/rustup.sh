@@ -54,9 +54,7 @@ is_installed() {
 }
 
 install_package() {
-  if ! install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"; then
-    return 1
-  fi
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
 
   case "$DISTRO" in
   arch | cachyos | ubuntu)
