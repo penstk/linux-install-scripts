@@ -17,23 +17,11 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 . "$ROOT_DIR/helpers/shell-helpers.sh"
 
-append_fish_config() {
-  local file="$HOME/.config/fish/config.fish"
-  local marker="# Zoxide configuration code"
-  local block='
-# Zoxide configuration code
-zoxide init fish | source
-'
-  append_block_if_missing "$file" "$marker" "$block"
-}
-
 configure_shells() {
-  # POSIX shells (bash, zsh, generic login shell)
-  append_line_if_missing "$HOME/.bashrc" 'eval "$(zoxide init bash)"'
-  append_line_if_missing "$HOME/.zshrc" 'eval "$(zoxide init zsh)"'
-
-  # Fish shell
-  append_fish_config
+  # Add to PATH in interactive shells
+  append_shell_bash_line_if_missing 'eval "$(zoxide init bash)"'
+  append_shell_zsh_line_if_missing 'eval "$(zoxide init zsh)"'
+  append_fish_interactive_line_if_missing 'zoxide init fish | source'
 }
 
 is_installed() {

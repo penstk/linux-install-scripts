@@ -452,6 +452,18 @@ install_and_print_summary() {
   fi
 }
 
+# Finalizes shell hooks after all packages ran (repairs dotfiles that installers may overwrite).
+ensure_shell_env_hooks() {
+  # shellcheck source=/dev/null
+  . "$ROOT_DIR/helpers/shell-helpers.sh"
+
+  ensure_shell_env_login_hooks || true
+  ensure_shell_bash_hook || true
+  ensure_shell_zsh_hook || true
+  ensure_fish_env_file || true
+  ensure_fish_interactive_file || true
+}
+
 main() {
   init_logging
 
@@ -470,6 +482,9 @@ main() {
 
   # Install and print summary
   install_and_print_summary "${INSTALL_ORDER[@]}"
+
+  # Ensure shell env/interactive files + hooks exist
+  ensure_shell_env_hooks
 
   stop_sudo_keepalive
 

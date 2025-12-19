@@ -13,8 +13,7 @@ is_installed() {
   is_installed_cmd "brew"
 }
 
-append_fish_asdf_block() {
-  local file="$HOME/.config/fish/config.fish"
+append_fish_homebrew_block() {
   local marker="# Homebrew configuration code"
   local block='
 # Homebrew configuration code
@@ -24,7 +23,7 @@ else if test -x /home/linuxbrew/.linuxbrew/bin/brew
     eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)
 end
 '
-  append_block_if_missing "$file" "$marker" "$block"
+  append_fish_env_block_if_missing "$marker" "$block"
 }
 
 configure_brew_shells() {
@@ -42,11 +41,10 @@ configure_brew_shells() {
   # POSIX shells (bash, zsh, generic login shell)
   local shellenv_line='eval "$('"$brew_path"' shellenv)"'
 
-  append_line_if_missing "$HOME/.bashrc" "$shellenv_line"
-  append_line_if_missing "$HOME/.zshrc" "$shellenv_line"
+  append_shell_env_line_if_missing "$shellenv_line"
 
   # Fish shell
-  append_fish_asdf_block
+  append_fish_homebrew_block
 
   # Ensure brew is available in the current shell session, that runs the install.sh script
   eval "$("$brew_path" shellenv)"

@@ -72,7 +72,6 @@ install_asdf_from_github() {
 }
 
 append_fish_asdf_block() {
-  local file="$HOME/.config/fish/config.fish"
   local marker="# ASDF configuration code"
   local block='
 # ASDF configuration code
@@ -89,42 +88,30 @@ if not contains $_asdf_shims $PATH
 end
 	set --erase _asdf_shims
 '
-  append_block_if_missing "$file" "$marker" "$block"
+  append_fish_env_block_if_missing "$marker" "$block"
 }
 
 configure_asdf_shells() {
-  # POSIX shells (bash, zsh, generic login shell)
-  local shim_line='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
-
-  append_line_if_missing "$HOME/.bash_profile" "$shim_line"
-  append_line_if_missing "$HOME/.zshrc" "$shim_line"
-  append_line_if_missing "$HOME/.profile" "$shim_line"
+  append_shell_env_line_if_missing 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
 
   # Fish shell
   append_fish_asdf_block
 
   # Make sure shims are available in the current shell session, that runs the install.sh script
-  local shim_dir="${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
-  case ":$PATH:" in
-  *":$shim_dir:"*) ;;
-  *) export PATH="$shim_dir:$PATH" ;;
-  esac
+  ensure_path_contains "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 }
 
 # Configure completions for Bash, Zsh, Fish
 configure_asdf_completions() {
-  # Bash completions (simple eval line)
-  local bash_line='. <(asdf completion bash)'
-  append_line_if_missing "$HOME/.bashrc" "$bash_line"
+  # Bash completions
+  append_shell_bash_line_if_missing '. <(asdf completion bash)'
 
   # Zsh completions
   mkdir -p "${ASDF_DATA_DIR:-$HOME/.asdf}/completions"
   asdf completion zsh >"${ASDF_DATA_DIR:-$HOME/.asdf}/completions/_asdf"
 
-  local zsh_fpath_line='fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)'
-  local zsh_compinit_line='autoload -Uz compinit && compinit'
-  append_line_if_missing "$HOME/.zshrc" "$zsh_fpath_line"
-  append_line_if_missing "$HOME/.zshrc" "$zsh_compinit_line"
+  append_shell_zsh_line_if_missing 'fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)'
+  append_shell_zsh_line_if_missing 'autoload -Uz compinit && compinit'
 
   # Fish completions
   local fish_comp_dir="$HOME/.config/fish/completions"

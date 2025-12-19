@@ -18,7 +18,6 @@ FEDORA_PKG="$APP_NAME"
 . "$ROOT_DIR/helpers/shell-helpers.sh"
 
 append_fish_cargo_block() {
-  local file="$HOME/.config/fish/config.fish"
   local marker="# Cargo configuration code"
   local block='
 # Cargo configuration code
@@ -29,24 +28,16 @@ if not contains $_cargo_bin $PATH
 end
 set --erase _cargo_bin
 '
-  append_block_if_missing "$file" "$marker" "$block"
+  append_fish_env_block_if_missing "$marker" "$block"
 }
 
 configure_cargo_shells() {
-  local cargo_line='export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"'
-
-  append_line_if_missing "$HOME/.bash_profile" "$cargo_line"
-  append_line_if_missing "$HOME/.zshrc" "$cargo_line"
-  append_line_if_missing "$HOME/.profile" "$cargo_line"
+  append_shell_env_line_if_missing 'export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"'
 
   append_fish_cargo_block
 
   # Make sure cargo are available in the current shell session, that runs the install.sh script
-  local cargo_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
-  case ":$PATH:" in
-  *":$cargo_dir:"*) ;;
-  *) export PATH="$cargo_dir:$PATH" ;;
-  esac
+  ensure_path_contains "${CARGO_HOME:-$HOME/.cargo}/bin"
 }
 
 is_installed() {
@@ -54,7 +45,7 @@ is_installed() {
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" || return 1
 
   case "$DISTRO" in
   arch | cachyos | ubuntu)
@@ -69,5 +60,5 @@ install_package() {
     ;;
   esac
 
-  configure_cargo_shells
+  configure_cargo_shells || return 1
 }
