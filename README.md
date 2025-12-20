@@ -102,3 +102,39 @@ install_package() {
 ```
 
 Dependencies are resolved automatically before installation.
+
+---
+
+## Shell configuration (PATH/env vs interactive)
+
+Some installers (notably `oh-my-bash` / `oh-my-zsh`) overwrite `~/.bashrc` / `~/.zshrc`, which can clobber PATH/env changes made earlier in the install. To make shell configuration repeatable and resilient to overwrites, this project writes shell config into dedicated files and only adds small “hook” snippets to your dotfiles.
+
+**Files (Bash + Zsh)**
+
+- `~/.config/shell/env`: PATH + environment only (POSIX sh). Sourced from login dotfiles so it applies to login shells and often your GUI session environment.
+- `~/.config/shell/bash-interactive`: Bash interactive-only init (the equivalent of `~/.bashrc`). Sources `~/.config/shell/env` and optionally `~/.config/shell/env.bash` (if present).
+- `~/.config/shell/zsh-interactive`: Zsh interactive-only init (the equivalent of `~/.zshrc`). Sources `~/.config/shell/env` and optionally `~/.config/shell/env.zsh` (if present).
+
+**Hooks (where sourcing happens)**
+
+- Login hook (sources `~/.config/shell/env`):
+  - `~/.profile` (always ensured)
+  - `~/.bash_profile` (only modified if it already exists)
+  - `~/.zprofile` (ensured when Zsh is installed/available)
+- Interactive hooks (source the per-shell interactive file):
+  - Bash: `~/.bashrc` or, if `oh-my-bash` is installed, `~/.oh-my-bash/custom/source-bash-interactive.sh`
+  - Zsh: `~/.zshrc` or, if `oh-my-zsh` is installed, `~/.oh-my-zsh/custom/source-zsh-interactive.zsh`
+
+All of these files include a small guard at the top to avoid duplicate work if they get sourced multiple times in one session. You may add your own exports/evals below the header, but don’t modify/remove the header/guard lines.
+
+**Fish**
+
+Fish uses Fish-native config (Fish can’t reliably source POSIX sh files):
+
+- `~/.config/fish/conf.d/shell-env.fish`: PATH + environment only
+- `~/.config/fish/conf.d/shell-interactive.fish`: interactive-only init (only runs when interactive)
+
+**What goes where**
+
+- Put PATH exports and “environment for everything” in the env files (e.g. Homebrew/Rust/asdf PATH setup).
+- Put interactive-only setup in the interactive files (e.g. `zoxide init`, completions, prompts, aliases).
