@@ -24,7 +24,7 @@ is_installed() {
 install_package() {
   case "$DISTRO" in
   arch | cachyos)
-    sudo paru -S --needed --noconfirm webex-bin || return 1
+    paru -S --needed --noconfirm webex-bin || return 1
     ;;
   ubuntu)
     install_pkg_from_url "$DEB_URL" || return 1
