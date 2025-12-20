@@ -12,5 +12,10 @@ is_installed() {
 }
 
 install_package() {
+  # On some distros (e.g. Arch), ZSH may be exported as /usr/share/oh-my-zsh.
+  # Override it so the installer uses the per-user directory.
+  export ZSH="$HOME/.oh-my-zsh"
+
+  # Install oh-my-zsh
   curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 }
