@@ -1,10 +1,6 @@
 # Application name (used in logs / messages)
 APP_NAME="webex"
 
-# Command to check for in PATH.
-# Use a different value if the binary name differs from APP_NAME.
-CMD_NAME="$APP_NAME"
-
 # Distro-specific dependencies:
 DEPENDENCIES=()
 case "$DISTRO" in
@@ -22,7 +18,7 @@ RPM_URL="https://binaries.webex.com/WebexDesktop-CentOS-Official-Package/Webex.r
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
-  is_installed_cmd "$CMD_NAME"
+  [[ -x /opt/Webex/bin/CiscoCollabHost ]]
 }
 
 install_package() {
@@ -35,6 +31,7 @@ install_package() {
     ;;
 
   fedora)
+    sudo dnf install -y libxcrypt-compat
     install_pkg_from_url "$RPM_URL" || return 1
     ;;
 
