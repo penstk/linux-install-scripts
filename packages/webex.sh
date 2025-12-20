@@ -18,7 +18,14 @@ RPM_URL="https://binaries.webex.com/WebexDesktop-CentOS-Official-Package/Webex.r
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
 
 is_installed() {
-  [[ -x /opt/Webex/bin/CiscoCollabHost ]]
+  case "$DISTRO" in
+  arch | cachyos)
+    is_installed_cmd "webex" || return 1
+    ;;
+  ubuntu | fedora)
+    [[ -x /opt/Webex/bin/CiscoCollabHost ]] || return 1
+    ;;
+  esac
 }
 
 install_package() {
