@@ -23,6 +23,9 @@ The main entry point is `install.sh`, which:
 
 ## Usage
 
+> Recommended: run a full system update and reboot before running the installer. While `install.sh` updates packages at the beginning, it won’t reboot for you if a restart is required (e.g. after kernel/glibc/systemd updates).
+
+
 Install from config file
 
 ```bash
