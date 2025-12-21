@@ -1,11 +1,3 @@
-# Distro-specific dependencies:
-DEPENDENCIES=()
-case "$DISTRO" in
-ubuntu)
-  DEPENDENCIES+=(curl)
-  ;;
-esac
-
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/shell-helpers.sh"
