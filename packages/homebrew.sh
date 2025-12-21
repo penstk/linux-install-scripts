@@ -39,9 +39,7 @@ configure_brew_shells() {
   fi
 
   # POSIX shells (bash, zsh, generic login shell)
-  local shellenv_line='eval "$('"$brew_path"' shellenv)"'
-
-  append_shell_env_line_if_missing "$shellenv_line"
+  append_shell_env_line_if_missing 'eval "$('"$brew_path"' shellenv)"'
 
   # Fish shell
   append_fish_homebrew_block
