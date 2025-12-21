@@ -27,44 +27,7 @@ install_package() {
     ;;
 
   ubuntu)
-    # Detect arch via dpkg
-    local arch="$(dpkg --print-architecture 2>/dev/null || true)"
-
-    # Fallback if dpkg did not work
-    if [[ -z "$arch" ]]; then
-      case "$(uname -m)" in
-      x86_64 | amd64)
-        arch="amd64"
-        ;;
-      aarch64 | arm64)
-        arch="arm64"
-        ;;
-      *)
-        echo "Unsupported Ubuntu architecture '$(uname -m)'." >&2
-        return 1
-        ;;
-      esac
-    fi
-
-    case "$arch" in
-    amd64 | arm64) ;;
-    *)
-      echo "Unsupported Ubuntu architecture '$arch'." >&2
-      return 1
-      ;;
-    esac
-
-    # Only run apt-get update if it hasn’t been done in this session
-    if [[ "${APT_UPDATED:-0}" != 1 ]]; then
-      sudo apt-get update
-      APT_UPDATED=1
-    fi
-
-    sudo install -dm 755 /etc/apt/keyrings
-    curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.pub 1>/dev/null
-    echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.pub arch=$arch] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
-    sudo apt update
-    sudo apt install -y mise
+    sudo snap install mise --beta --classic
     ;;
 
   fedora)
