@@ -30,11 +30,11 @@ EOF
   append_fish_env_line_if_missing 'mise activate fish --shims | source'
 }
 
-configure_shells() {
-  append_shell_bash_line_if_missing 'eval "$(mise activate bash)"'
-  append_shell_zsh_line_if_missing 'eval "$(mise activate zsh)"'
-  append_fish_interactive_line_if_missing 'mise activate fish | source'
-}
+# configure_shells() {
+#   append_shell_bash_line_if_missing 'eval "$(mise activate bash)"'
+#   append_shell_zsh_line_if_missing 'eval "$(mise activate zsh)"'
+#   append_fish_interactive_line_if_missing 'mise activate fish | source'
+# }
 
 install_package() {
   case "$DISTRO" in
@@ -57,6 +57,6 @@ install_package() {
     ;;
   esac
 
-  configure_shells || return 1
+  # configure_shells || return 1
   configure_shims || return 1
 }
