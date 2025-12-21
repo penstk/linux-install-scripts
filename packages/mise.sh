@@ -61,10 +61,10 @@ install_package() {
     fi
 
     sudo install -dm 755 /etc/apt/keyrings
-    curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.pub >/dev/null
-    echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.pub arch=$arch] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list >/dev/null
-    sudo apt-get update || return 1
-    sudo apt-get install -y mise || return 1
+    curl -fSs https://mise.jdx.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.pub 1>/dev/null
+    echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.pub arch=$arch] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+    sudo apt update
+    sudo apt install -y mise
     ;;
 
   fedora)
@@ -74,9 +74,9 @@ install_package() {
 
   *)
     echo " Unsupported distro '$DISTRO'." >&2
-	    return 1
-	    ;;
-	  esac
+    return 1
+    ;;
+  esac
 
   configure_shells || return 1
 }
