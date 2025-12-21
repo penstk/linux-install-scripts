@@ -15,11 +15,20 @@ FEDORA_PKG="$APP_NAME"
 # Load helper scripts
 . "$ROOT_DIR/helpers/is_installed.sh"
 . "$ROOT_DIR/helpers/pkg-helpers.sh"
+. "$ROOT_DIR/helpers/shell-helpers.sh"
+
+configure_shells() {
+  # Set up fzf key bindings and fuzzy completion
+  append_shell_bash_line_if_missing 'eval "$(fzf --bash)"'
+  append_shell_zsh_line_if_missing 'source <(fzf --zsh)'
+  append_fish_interactive_line_if_missing 'fzf --fish | source'
+}
 
 is_installed() {
   is_installed_cmd "$CMD_NAME"
 }
 
 install_package() {
-  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG"
+  install_via_pkgmgr "$APP_NAME" "$ARCH_PKG" "$UBUNTU_PKG" "$FEDORA_PKG" || return 1
+  configure_shells || return 1
 }
