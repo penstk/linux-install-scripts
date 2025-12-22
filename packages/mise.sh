@@ -11,22 +11,26 @@ configure_shims() {
     cat <<'EOF'
 # mise shims integration
 
-if [ -n "${BASH_VERSION-}" ]; then
-  eval "$(mise activate bash --shims)"
-elif [ -n "${ZSH_VERSION-}" ]; then
-  eval "$(mise activate zsh --shims)"
-fi
+case $- in
+  *i*) : ;;  # interactive: full activation lives in .bashrc/.zshrc
+  *)
+    command -v mise >/dev/null 2>&1 && {
+      [ -n "${ZSH_VERSION-}" ] && eval "$(mise activate zsh --shims)"
+      [ -n "${BASH_VERSION-}" ] && eval "$(mise activate bash --shims)"
+    }
+    ;;
+esac
 EOF
   )"
 
   append_fish_env_line_if_missing 'mise activate fish --shims | source'
 }
 
-# configure_shells() {
-#   append_shell_bash_line_if_missing 'eval "$(mise activate bash)"'
-#   append_shell_zsh_line_if_missing 'eval "$(mise activate zsh)"'
-#   append_fish_interactive_line_if_missing 'mise activate fish | source'
-# }
+configure_shells() {
+  append_shell_bash_line_if_missing 'eval "$(mise activate bash)"'
+  append_shell_zsh_line_if_missing 'eval "$(mise activate zsh)"'
+  append_fish_interactive_line_if_missing 'mise activate fish | source'
+}
 
 install_package() {
   case "$DISTRO" in
@@ -49,6 +53,6 @@ install_package() {
     ;;
   esac
 
-  # configure_shells || return 1
+  configure_shells || return 1
   configure_shims || return 1
 }
