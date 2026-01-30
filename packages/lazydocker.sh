@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034 # used by install.sh dependency resolver
 DEPENDENCIES=(
   homebrew
+  gcc
 )
 
 # Load helper scripts
